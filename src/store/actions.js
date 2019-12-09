@@ -10,7 +10,7 @@ export default {
   // 获取大学信息
   [type.SET_UNIVERSITY] ({commit}) {
     getUniversity().then(data => {
-      commit(type.SET_UNIVERSITY, data)
+      // commit(type.SET_UNIVERSITY, data)
     })
   }
 }

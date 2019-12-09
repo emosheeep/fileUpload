@@ -5,7 +5,7 @@
       <van-field readonly clickable label="学校" :value="school"
         placeholder="选择学校" @click="showPicker = true" />
       <van-popup v-model="showPicker" position="bottom">
-        <van-picker show-toolbar :columns="1"
+        <van-picker show-toolbar :columns="columns"
                     @cancel="showPicker = false"
                     @confirm="onConfirm"/>
       </van-popup>
@@ -20,16 +20,36 @@
 </template>
 
 <script>
-import {sendAuthCode} from '../api/api'
+import _ from 'lodash'
+import {sendAuthCode, getUniversity} from '../api/api'
 export default {
   name: 'login',
   data () {
     return {
       smsCode: '',
       showPicker: false,
-      username: '',
       school: '',
-      mobile: ''
+      username: '',
+      mobile: '',
+      provinces: [],
+      cities: [],
+      universities: []
+    }
+  },
+  computed: {
+    columns () {
+      return [
+        {
+          values: this.provinces,
+          className: 'province'
+        },
+        {
+          values: this.universities.map((item) => {
+            return item.name
+          }),
+          className: 'school'
+        }
+      ]
     }
   },
   methods: {
@@ -43,9 +63,9 @@ export default {
           mobile: this.mobile
         }
       }
-      // sendAuthCode(data).then(data => {
-      //   console.log(data)
-      // }).catch(err => { console.error(err) })
+      sendAuthCode(data).then(data => {
+        console.log(data)
+      }).catch(err => { console.error(err) })
     },
     // 验证码校验
     isCodePassed () {
@@ -64,9 +84,21 @@ export default {
         }
       }).catch(err => { console.log(err) })
     }
+  },
+  mounted () {
+    getUniversity().then(data => {
+      let university = data
+      this.provinces = Object.keys(university.province)
+      this.cities = Object.keys(university.school)
+      this.universities = _.reduce(university.school, (result, item) => {
+        return result.concat(item)
+      }, [])
+    }).catch(err => { console.log(err) })
   }
 }
 </script>
 
 <style scoped lang="stylus">
+  .school
+    width 45%
 </style>
