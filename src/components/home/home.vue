@@ -1,7 +1,7 @@
 <template>
     <div>
       <van-nav-bar title="我的主页" right-text="按钮"/>
-      <div class="header" @click="login">
+      <div class="header" @click="myInfo">
         <div class="avatar">
           <van-image round width="6rem" height="6rem" cover
                      src="https://img.yzcdn.cn/vant/cat.jpeg"/>
@@ -33,8 +33,13 @@ export default {
     }
   },
   methods: {
-    login () {
-      console.log('进入登陆页面')
+    myInfo () {
+      // 获取本地登陆状态
+      let localState = this.$cookie.get('localUser')
+      if (!localState) {
+        return this.$router.push({name: 'login'})
+      }
+      console.log(localState)
     }
   }
 }

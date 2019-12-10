@@ -5,6 +5,8 @@ ajax请求函数模块
 import axios from 'axios'
 import Qs from 'qs'
 
+axios.defaults.withCredentials = true // 携带cookie
+
 export default function (url, data = {}, type = 'GET') {
   return new Promise(function (resolve, reject) {
     // 保存由axios返回的promise对象

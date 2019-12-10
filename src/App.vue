@@ -5,12 +5,8 @@
 </template>
 
 <script>
-import type from './store/mutation-types'
 export default {
-  name: 'App',
-  mounted () {
-    this.$store.dispatch(type.SET_UNIVERSITY)
-  }
+  name: 'App'
 }
 </script>
 

@@ -5,6 +5,7 @@ const baseURL = 'http://localhost:3000/api'
 const PHONE = `${baseURL}/auth`
 const USER = `${baseURL}/user`
 const UNIVERSITY = `${baseURL}/university`
+const LOGIN = `${baseURL}/login`
 
 // 用户增删改查
 export const userEdit = data => http(USER, data, 'POST')
@@ -12,3 +13,5 @@ export const userEdit = data => http(USER, data, 'POST')
 export const sendAuthCode = data => http(PHONE, data, 'POST')
 // 获取大学信息
 export const getUniversity = () => http(UNIVERSITY)
+// 登陆
+export const login = data => http(LOGIN, data, 'POST')

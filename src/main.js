@@ -6,9 +6,13 @@ import router from './router'
 import store from './store'
 import Vant from 'vant'
 import 'vant/lib/index.css'
+import Cookies from 'js-cookie'
 
 Vue.use(Vant)
 Vue.config.productionTip = false
+
+// 全局绑定cookie函数
+Vue.prototype.$cookie = Cookies
 
 /* eslint-disable no-new */
 new Vue({
