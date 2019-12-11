@@ -5,7 +5,11 @@ import type from './mutation-types'
 
 export default {
   // 设置大学信息
-  [type.SET_UNIVERSITY] (state, data) {
-    state.university = data
+  [type.UPDATE_USER] (state, data = {}) {
+    for (let key in state) {
+      if (data[key]) {
+        state[key] = data[key]
+      }
+    }
   }
 }

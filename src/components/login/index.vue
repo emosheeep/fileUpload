@@ -13,7 +13,6 @@
 
 <script>
 import login from './login'
-import register from './register'
 export default {
   name: 'index',
   data () {
@@ -27,7 +26,8 @@ export default {
   },
   components: {
     login,
-    register
+    'register': () => import('./register'),
+    'phone': import('./phone')
   }
 }
 </script>

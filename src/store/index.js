@@ -7,14 +7,19 @@ import state from './state'
 import mutations from './mutations'
 import actions from './actions'
 import getters from './getters'
+import createPersistedState from 'vuex-persistedstate'
 import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
+const persistedState = createPersistedState({
+  storage: window.sessionStorage
+})
+
 export default new Vuex.Store({
   state,
   actions,
   mutations,
   getters,
-  plugins: debug ? [createLogger()] : [] // 调试插件，控制台打印具体信息
+  plugins: debug ? [createLogger(), persistedState] : [persistedState] // 调试插件，控制台打印具体信息
 })

@@ -1,7 +1,10 @@
 export default {
-  getQuestion (state) {
-    return function (filename) {
-      return state.questions[filename] || null
+  userInfo (state) {
+    return {
+      username: state.username,
+      studentID: state.studentID,
+      phone: state.phone,
+      university: state.university
     }
   }
 }

@@ -1,17 +1,17 @@
 <template>
   <div>
-    <van-field v-model="phone" type="tel" label="手机号" required
+    <van-field v-model="phone" type="tel" label="手机号" maxlength="11"
                placeholder="请输入手机号"
-               maxlength="11"
                @blur="judgeMobile"
                :error-message="telErrMsg"/>
-    <van-field v-model="studentID"  label="学号"  placeholder="请输入学号" required/>
-    <van-button plain :loading="loading" @click="login">登陆</van-button>
+    <van-field v-model="studentID"  label="学号"  placeholder="请输入学号"/>
+    <van-button plain size="large" :loading="loading" @click="login">登陆</van-button>
   </div>
 </template>
 
 <script>
-import {login} from '../../api/api.js'
+import {login} from '../../api/api'
+import type from '../../store/mutation-types'
 export default {
   name: 'login',
   data () {
@@ -52,6 +52,7 @@ export default {
         } else { // 登陆成功
           result.msg && this.$toast(result.msg)
           this.loading = false
+          this.$store.commit(type.UPDATE_USER, result.user)
           this.$router.push({path: '/'}) // 跳转到主页
         }
       } catch (e) {
