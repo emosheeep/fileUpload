@@ -1,6 +1,6 @@
 <template>
     <div>
-      <van-nav-bar left-text="返回"  left-arrow  @click-left="onClickLeft"/>
+      <van-nav-bar left-text="返回"  left-arrow  @click-left="back"/>
       <van-tabs v-model="active" color="black">
         <van-tab title="登陆"></van-tab>
         <van-tab title="注册"></van-tab>
@@ -22,7 +22,9 @@ export default {
     }
   },
   methods: {
-    onClickLeft () {}
+    back () {
+      this.$router.go(-1)
+    }
   },
   components: {
     login,

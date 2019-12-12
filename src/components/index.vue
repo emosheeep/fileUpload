@@ -4,8 +4,8 @@
         <component :is="container[active]"></component>
       </keep-alive>
       <van-tabbar v-model="active">
-        <van-tabbar-item icon="search">标签</van-tabbar-item>
-        <van-tabbar-item icon="setting-o">标签</van-tabbar-item>
+        <van-tabbar-item icon="search">探索</van-tabbar-item>
+        <van-tabbar-item icon="setting-o">主页</van-tabbar-item>
       </van-tabbar>
     </div>
 </template>

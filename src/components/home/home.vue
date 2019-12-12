@@ -7,7 +7,7 @@
                      src="https://img.yzcdn.cn/vant/cat.jpeg"/>
         </div>
         <div class="info">
-          <div v-if="loginState">
+          <div v-if="username">
             <p>{{username}}</p>
             <p>{{university.name}}</p>
           </div>
@@ -22,27 +22,25 @@
       <van-popup v-model="showInfo" position="right" style="width: 100%; height: 100%">
         <van-nav-bar title="个人信息" left-text="返回" left-arrow
                      @click-left="showInfo = false"/>
-<!--        手机号-->
-        <van-cell-group title="账号信息" :border="false">
-          <van-cell title="更换手机号" :value="phone" is-link
-                     @click="showPhoneChange"></van-cell>
+<!--        基础信息-->
+        <van-cell-group title="基本信息" :border="false">
+          <van-cell title="手机号" :value="phone" />
+          <van-cell title="姓名" :value="username" />
+          <van-cell title="学号" :value="studentID" />
+          <van-cell title="学校" :value="university.name" />
+        </van-cell-group>
+        <van-divider />
+        <van-cell-group title="操作" :border="false">
+          <!--        手机号-->
+          <van-cell title="换绑手机号" is-link @click="showPhoneChange" />
           <van-popup v-model="changePhoneShow" position="right" :lazy-render="false"
                      style="width: 100%; height: 100%">
             <van-nav-bar title="修改信息" left-text="返回" left-arrow
                          @click-left="changePhoneShow = false"/>
             <phone submitText="确认" :loading="loading"
-                   @submit="updatePhone" ref="updatePhone"></phone>
+                   @submit="updatePhone" ref="updatePhone" />
           </van-popup>
-        </van-cell-group>
-<!--        基础信息-->
-        <van-cell-group title="基本信息" :border="false">
-          <van-cell title="姓名" :value="username"></van-cell>
-          <van-cell title="学号" :value="studentID"></van-cell>
-          <van-cell title="学校" :value="university.name"></van-cell>
-        </van-cell-group>
-        <van-divider />
-<!--        修改基础信息-->
-        <van-cell-group title="操作" :border="false">
+          <!--        修改基础信息-->
           <van-cell title="修改资料" is-link @click="showUpdate"></van-cell>
           <van-popup v-model="updateShow" position="right" :lazy-render="false"
                      style="width: 100%; height: 100%">
@@ -55,17 +53,19 @@
               </template>
             </register>
           </van-popup>
-          <van-cell title="退出登录" is-link></van-cell>
         </van-cell-group>
+<!--        退出登录-->
+        <van-button size="large" style="margin-top: 60px"
+                    type="danger"
+                    @click="logout">退出登录</van-button>
       </van-popup>
-      <van-divider style="margin: 1px 0"/>
     </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
 import _ from 'lodash'
-import {update} from '../../api/api'
+import {update, logout} from '../../api/api'
 import type from '../../store/mutation-types'
 import register from '../login/register'
 export default {
@@ -83,8 +83,7 @@ export default {
       username: 'username',
       studentID: 'studentID',
       phone: 'phone',
-      university: 'university',
-      loginState: 'loginState'
+      university: 'university'
     })
   },
   methods: {
@@ -99,15 +98,52 @@ export default {
       this.$refs.updatePhone.setDefaultPhone(this.phone)
     },
     isLogin () {
-      // 获取本地登陆状态
-      if (!this.$cookie.get('loginUser')) {
-        return this.$router.push({name: 'login'})
+      // 判断本地信息是否还存在
+      if (this.checkState(this.$store.getters.userInfo)) {
+        return (this.showInfo = true)
       }
-      this.showInfo = true
+      this.$router.push({name: 'login'})
+    },
+    // 退出登录
+    async logout () {
+      let beforeClose = function (action, done) {
+        if (action === 'confirm') {
+          setTimeout(done, 1000)
+        } else {
+          done()
+        }
+      }
+      try {
+        await this.$dialog.confirm({
+          title: '提示',
+          message: '确认退出?',
+          beforeClose
+        })
+        // 执行登出逻辑
+        let result = await logout()
+        if (result.status) {
+          this.$store.commit(type.CLEAR_USER)
+          this.showInfo = false
+        } else {
+          this.$toast.fail(result.msg)
+        }
+      } catch (e) {}
+    },
+    // 检查数据完整性，不完整返回false
+    checkState (info) {
+      // 利用lodash排除空值
+      let values = _.values(info) // 对象属性值
+      let result = _.compact(values)
+      if (result.length !== values.length) {
+        return false
+      } else return true
     },
     // 修改基本信息 不包括账号（电话号码）
     async updateInfo (userInfo) {
-      let localUserInfo = this.$store.getters.userInfo
+      if (!this.checkState(userInfo)) {
+        return this.$toast('请填写完整')
+      }
+      let localUserInfo = _.clone(this.$store.getters.userInfo)
       delete localUserInfo.phone // 排除电话号码
       // 判断除电话号码外其他值是否相等
       let equal = _.isEqual(localUserInfo, userInfo)
@@ -119,6 +155,13 @@ export default {
         condition: { phone: this.phone },
         data: userInfo
       }
+      // 询问是否修改
+      try {
+        await this.$dialog.confirm({
+          title: '提示',
+          message: '确认修改吗？'
+        })
+      } catch (e) { return }
       try {
         this.loading = true
         let result = await update(optionUpdate)
@@ -144,6 +187,13 @@ export default {
       } else if (phone === this.phone) {
         return this.$toast('手机号相同')
       }
+      // 询问是否修改
+      try {
+        await this.$dialog.confirm({
+          title: '提示',
+          message: '确认修改吗？'
+        })
+      } catch (e) { return }
       try {
         this.loading = true
         let result = await update({

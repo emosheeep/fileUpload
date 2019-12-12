@@ -9,11 +9,13 @@ import actions from './actions'
 import getters from './getters'
 import createPersistedState from 'vuex-persistedstate'
 import createLogger from 'vuex/dist/logger'
+import Storage from '../utils/storage'
 
 Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 const persistedState = createPersistedState({
-  storage: window.sessionStorage
+  key: 'loginUser',
+  storage: new Storage()
 })
 
 export default new Vuex.Store({

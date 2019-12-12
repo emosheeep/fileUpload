@@ -1,11 +1,24 @@
 <template>
     <div>
       <van-cell-group>
-        <van-field v-model="username"  label="用户名"  placeholder="请输入姓名" />
-        <van-field readonly clickable label="学校" :value="university.name"
-                   placeholder="选择学校" @click="showPicker"/>
-        <van-popup v-model="show" :lazy-render="false" position="bottom"
-                   :duration="0.5" style="height: 100%">
+        <van-field
+          v-model="username"
+          label="用户名"
+          placeholder="请输入姓名" />
+        <van-field
+          readonly
+          clickable
+          label="学校"
+          :value="university.name"
+          placeholder="选择学校"
+          @click="showPicker"/>
+<!--        选择学校-->
+        <van-popup
+          v-model="show"
+          :lazy-render="false"
+          position="bottom"
+          :duration="0.5"
+          style="height: 100%">
           <van-sticky>
             <form action="/"><van-search
               v-model="searchText"
@@ -18,12 +31,15 @@
               @cancel="show = false"/>
             </form>
           </van-sticky>
-          <van-cell title="暂无记录" v-if="searchResult.length === 0" />
-          <van-cell-group @click="chooseSchool" :border="false">
+          <van-list
+            :finished="true"
+            @click.native="chooseSchool"
+            finished-text="没有更多了">
             <van-cell v-for="(item, index) in searchResult" :key="index"
                       :title="item" />
-          </van-cell-group>
+          </van-list>
         </van-popup>
+<!--        学校选择结束-->
         <van-field v-model="studentID"  label="学号"  placeholder="请输入学号"/>
 <!--        作用域插槽-->
         <slot v-bind:user="{
@@ -99,6 +115,7 @@ export default {
     // 选择学校
     chooseSchool (event) {
       let name = event.target.innerText
+      console.log(name)
       if (!name) {
         return
       }

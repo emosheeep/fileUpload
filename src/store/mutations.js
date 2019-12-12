@@ -11,5 +11,12 @@ export default {
         state[key] = data[key]
       }
     }
+  },
+  [type.CLEAR_USER] (state) {
+    state.username = ''
+    state.studentID = ''
+    state.phone = ''
+    state.university.name = ''
+    state.university.id = ''
   }
 }

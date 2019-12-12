@@ -1,11 +1,19 @@
 <template>
   <div>
-    <van-field v-model="phone" type="tel" label="手机号" maxlength="11"
+    <van-field v-model="phone"
+               type="tel"
+               label="手机号"
+               maxlength="11"
                placeholder="请输入手机号"
+               required
                @blur="judgeMobile"
                :error-message="telErrMsg"/>
-    <van-field v-model="studentID"  label="学号"  placeholder="请输入学号"/>
-    <van-button plain size="large" :loading="loading" @click="login">登陆</van-button>
+    <van-field v-model="studentID"
+               label="学号"
+               placeholder="请输入学号"/>
+    <van-button plain size="large"
+                :loading="loading"
+                @click="login">登陆</van-button>
   </div>
 </template>
 
