@@ -1,6 +1,7 @@
 <template>
     <div>
       <van-nav-bar title="我的主页" right-text="按钮"/>
+<!--      头像模块-->
       <div class="header" @click="isLogin">
         <div class="avatar">
           <van-image round width="6rem" height="6rem" cover
@@ -12,19 +13,21 @@
             <p>{{university.name}}</p>
           </div>
           <div v-else>
-            <h3>请先登录</h3>
+            <p>请先登录</p>
           </div>
         </div>
         <div class="right">
           <van-icon name="arrow"></van-icon>
         </div>
       </div>
+      <van-divider style="margin: 0 0 10px 0"/>
+      <!--      隐藏层-->
       <van-popup v-model="showInfo" position="right" style="width: 100%; height: 100%">
         <van-nav-bar title="个人信息" left-text="返回" left-arrow
                      @click-left="showInfo = false"/>
 <!--        基础信息-->
         <van-cell-group title="基本信息" :border="false">
-          <van-cell title="手机号" :value="phone" />
+          <van-cell title="账号" :value="phone" />
           <van-cell title="姓名" :value="username" />
           <van-cell title="学号" :value="studentID" />
           <van-cell title="学校" :value="university.name" />
@@ -59,6 +62,7 @@
                     type="danger"
                     @click="logout">退出登录</van-button>
       </van-popup>
+<!--      业务模块-->
     </div>
 </template>
 
@@ -234,6 +238,12 @@ export default {
   .info
     width 60%
     text-align left
-    p:nth-child(1)
-      font-size 18px
+    display flex
+    flex-direction column
+    justify-content space-around
+    p
+      margin 15px 0
+      &:nth-child(1)
+        font-size 18px
+
 </style>
