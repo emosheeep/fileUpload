@@ -165,13 +165,22 @@ export default {
       }
     },
     // 获取大学信息
-    getUniInfo () {
-      getUniversity().then(data => {
-        this.schools = data
-        this.uniName = Object.keys(data)
-      }).catch(() => {
-        this.getUniInfo() // 连续请求直到成功
-      })
+    async getUniInfo () {
+      let storage = window.sessionStorage
+      let schools = JSON.parse(storage.getItem('schools'))
+      if (!schools) {
+        // 本地缓存不存在则请求数据
+        try {
+          let result = await getUniversity()
+          schools = result
+          storage.setItem('schools', JSON.stringify(result))
+        } catch (e) {
+          console.error('大学信息获取失败')
+          return
+        }
+      }
+      this.schools = schools
+      this.uniName = Object.keys(schools)
     },
     // 根据场景设置表单值
     setUserInfo (data) {

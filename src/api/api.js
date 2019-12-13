@@ -1,7 +1,10 @@
 import http from './axios'
 
 // 本地接口
-const baseURL = 'http://localhost:3000/api'
+// const baseURL = 'http://localhost:3001/api'
+// 网络接口
+const baseURL = 'http://www.biubiubius.com:3001/api'
+
 const AUTH = `${baseURL}/auth`
 const UNIVERSITY = `${baseURL}/university`
 const LOGIN = `${baseURL}/login`

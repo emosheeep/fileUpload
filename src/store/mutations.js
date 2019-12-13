@@ -4,7 +4,7 @@
 import type from './mutation-types'
 
 export default {
-  // 设置大学信息
+  // 设置用户信息
   [type.UPDATE_USER] (state, data = {}) {
     for (let key in state) {
       if (data[key]) {
@@ -12,6 +12,7 @@ export default {
       }
     }
   },
+  // 清除用户信息
   [type.CLEAR_USER] (state) {
     state.username = ''
     state.studentID = ''
