@@ -11,7 +11,7 @@
           label="学校"
           :value="university.name"
           placeholder="选择学校"
-          @click="showPicker"/>
+          @click="show = true"/>
 <!--        选择学校-->
         <van-popup
           v-model="show"
@@ -19,25 +19,10 @@
           position="bottom"
           :duration="0.5"
           style="height: 100%">
-          <van-sticky>
-            <form action="/"><van-search
-              v-model="searchText"
-              placeholder="请输入学校关键词"
-              show-action
-              autofocus
-              shape="round"
-              @search="onSearch"
-              @input="onSearch"
-              @cancel="show = false"/>
-            </form>
-          </van-sticky>
-          <van-list
-            :finished="true"
-            @click.native="chooseSchool"
-            finished-text="没有更多了">
-            <van-cell v-for="(item, index) in searchResult" :key="index"
-                      :title="item" />
-          </van-list>
+          <school-picker
+            :init="university.name"
+            :show.sync="show"
+            :school.sync="university"/>
         </van-popup>
 <!--        学校选择结束-->
         <van-field v-model="studentID"  label="学号"  placeholder="请输入学号"/>
@@ -55,7 +40,8 @@
 
 <script>
 import _ from 'lodash'
-import {getUniversity, register} from '../../api/api'
+import {register} from '../../api/api'
+import SchoolPicker from './schoolPicker'
 export default {
   name: 'register',
   props: {
@@ -75,10 +61,6 @@ export default {
       username: '', // 用户姓名
       studentID: '', // 学号
       phone: '', // 电话号码
-      schools: {}, // 大学信息
-      uniName: [], // 大学名称集合，用来搜索
-      searchText: '', // 搜索框的文本
-      searchResult: [], // 搜索结果
       telErrMsg: '' // 手机号格式错误提示消息
     }
   },
@@ -94,12 +76,8 @@ export default {
       }
     }
   },
-  components: { 'phone': () => import('./phone') },
+  components: { SchoolPicker, 'phone': () => import('./phone') },
   methods: {
-    showPicker () {
-      this.show = true
-      this.searchText = this.university.name
-    },
     // 模糊搜索，并返回结果数组，lodash节流
     onSearch: _.throttle(function (value) {
       if (!value) {
@@ -164,24 +142,6 @@ export default {
         this.loading = false // 停止加载
       }
     },
-    // 获取大学信息
-    async getUniInfo () {
-      let storage = window.sessionStorage
-      let schools = JSON.parse(storage.getItem('schools'))
-      if (!schools) {
-        // 本地缓存不存在则请求数据
-        try {
-          let result = await getUniversity()
-          schools = result
-          storage.setItem('schools', JSON.stringify(result))
-        } catch (e) {
-          console.error('大学信息获取失败')
-          return
-        }
-      }
-      this.schools = schools
-      this.uniName = Object.keys(schools)
-    },
     // 根据场景设置表单值
     setUserInfo (data) {
       this.studentID = data.studentID
@@ -189,10 +149,6 @@ export default {
       this.university = data.university
       this.phone = data.phone
     }
-  },
-  mounted () {
-    // 获取大学信息
-    this.getUniInfo()
   }
 }
 </script>

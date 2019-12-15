@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../components/index.vue'
 import login from '../components/login/index.vue'
+import todoList from '../components/business/todoList/todoList'
+import myTask from '../components/business/myTask/myTask'
+import contact from '../components/contact/index'
 
 Vue.use(Router)
 
@@ -9,13 +12,28 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
+      name: 'home',
       component: index
     },
     {
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/myTask',
+      name: 'myTask',
+      component: myTask
+    },
+    {
+      path: '/todoList',
+      name: 'todoList',
+      component: todoList
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: contact
     }
   ],
   mode: 'history'

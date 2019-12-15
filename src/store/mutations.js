@@ -19,5 +19,15 @@ export default {
     state.phone = ''
     state.university.name = ''
     state.university.id = ''
+    state.contact = []
+    state.task = []
+  },
+  // 设置联系人信息
+  [type.SET_CONTACT] (state, contact) {
+    state.contact = contact
+  },
+  // 设置任务信息
+  [type.SET_TASK] (state, task) {
+    state.task = task
   }
 }
