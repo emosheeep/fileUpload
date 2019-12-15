@@ -56,8 +56,18 @@ export default {
         if (oldValue.length === 0) {
           return // 跳过第一次
         }
-        // actions提交联系人状态,本地和服务器都要比编辑
-        this.$store.dispatch(mutationTypes.SET_CONTACT, newVal)
+        // actions提交联系人状态,本地和服务器都要编辑
+        this.$toast.loading({
+          loadingType: 'spinner',
+          duration: 1000
+        })
+        this.$store.dispatch(mutationTypes.SET_CONTACT, {
+          data: newVal,
+          errCallback: (err) => {
+            console.error(err)
+            this.$toast.fail('同步失败')
+          }
+        })
       },
       deep: true
     }

@@ -3,8 +3,7 @@
       <van-cell-group>
         <van-cell
           is-link
-          :title="curTask.title"
-          :value="curTask.content"/>
+          :title="curTask.title"/>
       </van-cell-group>
     </div>
 </template>
@@ -26,13 +25,8 @@ export default {
     }
   },
   computed: {
-    curTask: {
-      get () {
-        return this.task
-      },
-      set (newVal) {
-
-      }
+    curTask () {
+      return this.task
     }
   }
 }

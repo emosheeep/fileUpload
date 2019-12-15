@@ -7,35 +7,34 @@ import {
 import type from './mutation-types'
 
 export default {
+  /**
+   * 注意：同步操作应该先更新远程数据，成功之后再更新本地数据
+   * 如果远程更新失败，本地还有备份保险，commit应该在成功回调中执行
+   */
   // 同步联系人信息
-  [type.SET_CONTACT] ({commit, state}, contact) {
-    commit(type.SET_CONTACT, contact)
+  [type.SET_CONTACT] ({commit, state}, payload) {
     let options = {
       condition: { phone: state.phone },
       data: {
-        contact: state.contact
+        contact: payload.data
       }
     }
     updateContact(options).then(res => {
+      commit(type.SET_CONTACT, payload.data)
       console.log(res.msg)
-    }).catch(errHandler)
+    }).catch(payload.errCallback)
   },
   // 同步任务信息
-  [type.SET_TASK] ({commit, state}, task) {
-    commit(type.SET_TASK, task)
+  [type.SET_TASK] ({commit, state}, payload) {
     let options = {
       condition: { phone: state.phone },
       data: {
-        task: state.task
+        task: payload.data
       }
     }
     addTask(options).then(res => {
+      commit(type.SET_TASK, payload.data)
       console.log(res.msg)
-    }).catch(errHandler)
+    }).catch(payload.errCallback)
   }
-}
-
-function errHandler (err) {
-  console.error(err)
-  this.$toast.fail('同步失败')
 }

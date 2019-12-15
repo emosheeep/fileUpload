@@ -3,7 +3,7 @@
       <van-cell-group>
         <van-field
           v-model="username"
-          label="用户名"
+          label="姓名"
           placeholder="请输入姓名" />
         <van-field
           readonly

@@ -27,7 +27,7 @@
         <van-datetime-picker
           @cancel="timePickerShow = false"
           @confirm="timePickerShow = false"
-          v-model="deadline"
+          v-model="tempTime"
           type="date"
           :min-date="minDate"
           :max-date="maxDate"
@@ -69,26 +69,25 @@ export default {
   },
   data () {
     return {
-      timePickerShow: false, // 时间选择器
-      minDate: new Date(),
-      maxDate: new Date(Date.now() + 31 * 3600 * 1000 * 24), // 最长一个月
+      // 时间选择器
+      timePickerShow: false,
+      minDate: new Date(), // 截止时间默认一天后
+      maxDate: new Date(Date.now() + 24 * 3600 * 1000 * 31), // 最长一个月
+      tempTime: new Date(), // 截止时间默认一天后
+      // 组件数据
+      timeChange: false, // 标识时间变化，确认用户是否选择了日期
       title: '',
       content: '',
-      deadline: new Date(Date.now() + 24 * 3600 * 1000), // 截止时间默认一天后
+      deadline: new Date(), // 通过watch设置截止时间
       userList: [] // 保存需要提交任务的用户
     }
   },
   computed: {
-    computedTime: {
-      get () {
-        let year = this.deadline.getFullYear()
-        let month = String(this.deadline.getMonth() + 1).padStart(2, '0')
-        let day = String(this.deadline.getDate()).padStart(2, '0')
-        return `${year}-${month}-${day}`
-      },
-      set (newVal) {
-        this.deadline = newVal
-      }
+    computedTime () {
+      let year = this.tempTime.getFullYear()
+      let month = String(this.tempTime.getMonth() + 1).padStart(2, '0')
+      let day = String(this.tempTime.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
     },
     contactGroups () {
       return this.$store.state.contact.map((item) => {
@@ -99,7 +98,18 @@ export default {
       contact: 'contact'
     })
   },
+  watch: {
+    tempTime (newVal) {
+      let time = this.getDayTime(newVal) // 时间归零
+      time = time.getTime() + (23 * 3600 + 3599) * 1000 // 当天的23:59秒截止
+      this.deadline = new Date(time)
+    }
+  },
   methods: {
+    // 将某天的时间归零
+    getDayTime (time) {
+      return new Date(time.getFullYear(), time.getMonth(), time.getDate())
+    },
     // 检查是否填完信息
     checkState () {
       let data = [
@@ -124,11 +134,16 @@ export default {
         return result
       }, [])
       list = _.uniqBy(list, 'studentID') // 按照学号去重
+      list = list.map((item) => { // 添加是否提交的状态，默认false，标识未提交
+        item.status = false
+        return item
+      })
       let data = {
         id: Date.now(),
         creator: this.$store.state.phone,
         title: this.title,
         content: this.content,
+        startTime: new Date(),
         deadline: this.deadline, // Date格式
         userList: list
       }

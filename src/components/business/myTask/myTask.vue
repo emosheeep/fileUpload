@@ -22,8 +22,23 @@
           :show.sync="addRecordShow" />
       </van-popup>
 <!--      已发布记录显示-->
-      <task-item v-for="(item, index) in taskList" :key="index"
-                 :task="item"/>
+      <van-pull-refresh style="overflow: visible"
+        v-model="isLoading"
+        @refresh="onRefresh"
+      >
+        <task-item v-for="(item, index) in taskList" :key="index"
+                   :task="item"
+                   @click.native="showTaskDetail(item)"
+        />
+      </van-pull-refresh>
+<!--      任务详情界面-->
+      <van-popup v-model="showDetail" position="bottom" style="height: 100%">
+        <task-detail
+          :show.sync="showDetail"
+          :task="curTask"
+          @del="onDelete"
+        />
+      </van-popup>
     </div>
 </template>
 
@@ -31,11 +46,14 @@
 import type from '../../../store/mutation-types'
 import AddTask from './addTask'
 import TaskItem from './taskItem'
+import TaskDetail from './taskDetail'
 export default {
-  name: 'myListSet',
-  components: {TaskItem, AddTask},
+  name: 'myTask',
+  components: {TaskDetail, TaskItem, AddTask},
   data () {
     return {
+      isLoading: false,
+      showDetail: false, // 任务详情界面
       addRecordShow: false, // 发布任务界面显示
       taskList: [],
       curTask: {}
@@ -46,7 +64,17 @@ export default {
       if (oldValue.length === 0) { // 过滤首次
         return
       }
-      this.$store.dispatch(type.SET_TASK, newVal)
+      this.$toast.loading({
+        loadingType: 'spinner',
+        duration: 1000
+      })
+      this.$store.dispatch(type.SET_TASK, {
+        data: newVal,
+        errCallback: (err) => {
+          console.error(err)
+          this.$toast.fail('同步失败')
+        }
+      })
     }
   },
   methods: {
@@ -54,7 +82,20 @@ export default {
       this.taskList.push(task)
     },
     onDelete (task) {
-
+      this.taskList = this.taskList.filter((item) => {
+        return task.id !== item.id
+      })
+    },
+    showTaskDetail (task) {
+      this.curTask = task
+      this.showDetail = true
+    },
+    // 刷新列表数据
+    onRefresh () {
+      setTimeout(() => {
+        this.taskList = this.$store.state.task
+        this.isLoading = false
+      }, 500)
     }
   },
   mounted () {
