@@ -2,7 +2,7 @@
     <div>
       <van-sticky>
         <form action="/"><van-search
-          v-model="originName"
+          v-model="searchText"
           placeholder="请输入学校关键词"
           show-action
           autofocus
@@ -19,7 +19,7 @@
         v-model="loading"
         :finished="finished"
         :immediate-check="false"
-        finished-text="没有更多了">
+        :finished-text="finishedText">
         <van-cell v-for="(item, index) in result" :key="index"
                   :title="item" />
       </van-list>
@@ -31,28 +31,16 @@ import _ from 'lodash'
 import {getUniversity} from '../../api/api'
 export default {
   name: 'schoolPicker',
-  props: {
-    init: String
-  },
   data () {
     return {
       finished: false,
+      finishedText: '没有更多了',
       loading: false,
       schools: {}, // 大学信息
       uniName: [], // 大学名称集合，用来搜索
       searchText: '',
       listChunk: [],
       result: [] // 显示结果
-    }
-  },
-  computed: {
-    originName: {
-      get () {
-        return this.init
-      },
-      set (newVal) {
-        this.searchText = newVal
-      }
     }
   },
   methods: {
@@ -81,12 +69,13 @@ export default {
       })
       this.listChunk = _.chunk(result, 20)
       this.result = this.listChunk.shift() // 初始化首屏数据
+      this.finished = false // 表示没有加载完
     }, 200),
     // 选择学校
     chooseSchool (event) {
       let name = event.target.innerText
       console.log(name)
-      if (!name) {
+      if (!name || name === this.finishedText) {
         return
       }
       let university = {

@@ -87,7 +87,6 @@ export default {
         return `${year}-${month}-${day}`
       },
       set (newVal) {
-        console.log(newVal)
         this.deadline = newVal
       }
     },
@@ -124,6 +123,7 @@ export default {
         }
         return result
       }, [])
+      list = _.uniqBy(list, 'studentID') // 按照学号去重
       let data = {
         id: Date.now(),
         creator: this.$store.state.phone,

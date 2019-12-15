@@ -11,7 +11,7 @@
           label="学校"
           :value="university.name"
           placeholder="选择学校"
-          @click="show = true"/>
+          @click="chooseSchool"/>
 <!--        选择学校-->
         <van-popup
           v-model="show"
@@ -20,7 +20,7 @@
           :duration="0.5"
           style="height: 100%">
           <school-picker
-            :init="university.name"
+            ref="university"
             :show.sync="show"
             :school.sync="university"/>
         </van-popup>
@@ -78,30 +78,9 @@ export default {
   },
   components: { SchoolPicker, 'phone': () => import('./phone') },
   methods: {
-    // 模糊搜索，并返回结果数组，lodash节流
-    onSearch: _.throttle(function (value) {
-      if (!value) {
-        this.searchResult = []
-        return
-      }
-      this.searchResult = _.filter(this.uniName, (item) => {
-        if (item.indexOf(value) !== -1) {
-          return true
-        }
-      })
-    }, 200),
-    // 选择学校
-    chooseSchool (event) {
-      let name = event.target.innerText
-      console.log(name)
-      if (!name) {
-        return
-      }
-      this.university = {
-        id: this.schools[name],
-        name: name
-      }
-      this.show = false
+    chooseSchool () {
+      this.show = true
+      this.$refs.university.searchText = this.university.name
     },
     // 检查数据完整性，不完整返回false
     checkState () {

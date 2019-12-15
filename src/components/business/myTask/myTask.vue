@@ -16,7 +16,10 @@
           title="发布任务"
           left-arrow
           @click-left="addRecordShow = false" />
-        <add-task @save="onSave" :show.sync="addRecordShow" />
+        <add-task
+          @save="onSave"
+          @del="onDelete"
+          :show.sync="addRecordShow" />
       </van-popup>
 <!--      已发布记录显示-->
       <task-item v-for="(item, index) in taskList" :key="index"
@@ -49,6 +52,9 @@ export default {
   methods: {
     onSave (task) {
       this.taskList.push(task)
+    },
+    onDelete (task) {
+
     }
   },
   mounted () {
