@@ -4,7 +4,7 @@
 <!--      头像模块-->
       <div class="header" @click="isLogin">
         <div class="avatar">
-          <van-image round width="6rem" height="6rem" cover
+          <van-image round width="5rem" height="5rem" cover
                      src="https://img.yzcdn.cn/vant/cat.jpeg"/>
         </div>
         <div class="info">
@@ -65,7 +65,7 @@
 <!--      业务模块-->
       <van-grid :column-num="3" clickable >
         <van-grid-item icon="todo-list-o" text="待提交" to="/todoList"/>
-        <van-grid-item icon="photo-o" text="我发布的" to="/myTask"/>
+        <van-grid-item icon="records" text="发布任务" to="/myTask"/>
         <van-grid-item icon="photo-o" text="文字" />
       </van-grid>
       <van-cell is-link title="编辑联系人分组" to="/contact"/>
@@ -259,7 +259,7 @@ export default {
   .avatar
     padding 10px
   .right
-    line-height 120px
+    line-height 100px
   .info
     width 60%
     text-align left

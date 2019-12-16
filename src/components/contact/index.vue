@@ -27,6 +27,7 @@
 import GroupList from './groupList'
 import GroupEdit from './groupEdit'
 import mutationTypes from '../../store/mutation-types'
+import {updateContact} from '../../api/api'
 export default {
   name: 'index',
   components: {GroupList, GroupEdit},
@@ -47,7 +48,7 @@ export default {
   },
   watch: {
     groupList: {
-      handler (newVal, oldValue) {
+      async handler (newVal, oldValue) {
         if (newVal.length === 0) {
           this.description = '点击加号，添加常用联系人组'
         } else {
@@ -56,18 +57,29 @@ export default {
         if (oldValue.length === 0) {
           return // 跳过第一次
         }
+        let options = {
+          condition: { phone: this.$store.state.phone },
+          data: {
+            contact: newVal
+          }
+        }
         // actions提交联系人状态,本地和服务器都要编辑
         this.$toast.loading({
           loadingType: 'spinner',
-          duration: 1000
+          duration: 0,
+          forbidClick: true
         })
-        this.$store.dispatch(mutationTypes.SET_CONTACT, {
-          data: newVal,
-          errCallback: (err) => {
-            console.error(err)
-            this.$toast.fail('同步失败')
+        try {
+          let result = await updateContact(options)
+          if (result.status) {
+            this.$store.commit(mutationTypes.SET_CONTACT, newVal)
           }
-        })
+        } catch (e) {
+          console.error(e)
+          this.$toast.fail('同步失败')
+        } finally {
+          this.$toast.clear() // 停止加载
+        }
       },
       deep: true
     }

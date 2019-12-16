@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import {removeTask} from '../../../api/api'
+
 export default {
   name: 'taskDetail',
   props: {
@@ -83,15 +85,27 @@ export default {
     addTime () {
 
     },
-    async onDelete () {
-      try {
-        await this.$dialog.confirm({
-          title: '警告',
-          message: '您确定结束该任务？结束后该任务将被删除'
-        })
-      } catch (e) { return }
-      this.$emit('del', this.task)
-      this.$emit('update:show', false)
+    onDelete () {
+      this.$dialog.confirm({
+        title: '警告',
+        message: '您确定结束该任务？结束后该任务将被删除'
+      }).then(async () => {
+        try {
+          this.$toast.loading({
+            loadingType: 'spinner',
+            duration: 0,
+            forbidClick: true
+          })
+          let result = await removeTask({task: this.task})
+          if (result.status) {
+            this.$emit('del', this.task)
+            this.$emit('update:show', false)
+          } else this.$toast.fail('删除失败')
+        } catch (e) {
+          console.error(e)
+          this.$toast.fail('删除失败')
+        } finally { this.$toast.clear() } // 停止加载
+      }).catch()
     },
     timeFormat (time) {
       time = new Date(time)

@@ -4,22 +4,22 @@
         title="我发布的"
         left-arrow
         @click-left="$router.push({name: 'home'})"
-        @click-right="addRecordShow = true">
+        @click-right="addTaskShow = true">
         <van-icon name="plus" slot="right" />
       </van-nav-bar>
 <!--      添加记录弹层-->
       <van-popup
-        v-model="addRecordShow"
+        v-model="addTaskShow"
         position="right"
         :style="{ width: '100%', height: '100%' }">
         <van-nav-bar
           title="发布任务"
           left-arrow
-          @click-left="addRecordShow = false" />
+          @click-left="addTaskShow = false" />
         <add-task
           @save="onSave"
           @del="onDelete"
-          :show.sync="addRecordShow" />
+          :show.sync="addTaskShow" />
       </van-popup>
 <!--      已发布记录显示-->
       <van-pull-refresh style="overflow: visible"
@@ -54,7 +54,7 @@ export default {
     return {
       isLoading: false,
       showDetail: false, // 任务详情界面
-      addRecordShow: false, // 发布任务界面显示
+      addTaskShow: false, // 发布任务界面显示
       taskList: [],
       curTask: {}
     }
@@ -64,23 +64,15 @@ export default {
       if (oldValue.length === 0) { // 过滤首次
         return
       }
-      this.$toast.loading({
-        loadingType: 'spinner',
-        duration: 1000
-      })
-      this.$store.dispatch(type.SET_TASK, {
-        data: newVal,
-        errCallback: (err) => {
-          console.error(err)
-          this.$toast.fail('同步失败')
-        }
-      })
+      this.$store.commit(type.SET_TASK, newVal)
     }
   },
   methods: {
-    onSave (task) {
+    // 添加一个任务
+    async onSave (task) {
       this.taskList.push(task)
     },
+    // 删除一个任务
     onDelete (task) {
       this.taskList = this.taskList.filter((item) => {
         return task.id !== item.id

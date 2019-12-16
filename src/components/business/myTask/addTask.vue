@@ -54,6 +54,7 @@
     <van-button round
                 size="large"
                 type="info"
+                :loading="loading"
                 style="position: fixed; bottom: 5%"
                 @click="addRecord">发布任务</van-button>
   </div>
@@ -62,6 +63,7 @@
 <script>
 import _ from 'lodash'
 import {mapState} from 'vuex'
+import {addTask} from '../../../api/api'
 export default {
   name: 'addTask',
   props: {
@@ -69,6 +71,7 @@ export default {
   },
   data () {
     return {
+      loading: false, // 按钮状态
       // 时间选择器
       timePickerShow: false,
       minDate: new Date(), // 截止时间默认一天后
@@ -90,12 +93,13 @@ export default {
       return `${year}-${month}-${day}`
     },
     contactGroups () {
-      return this.$store.state.contact.map((item) => {
+      return this.contact.map((item) => {
         return item.name
       })
     },
     ...mapState({
-      contact: 'contact'
+      contact: 'contact',
+      university: 'university'
     })
   },
   watch: {
@@ -122,10 +126,7 @@ export default {
         return false
       } else return true
     },
-    addRecord () {
-      if (!this.checkState()) {
-        return this.$toast('请填写完整')
-      }
+    createTask () {
       // 获取选中组别包含的所有联系人
       let list = _.reduce(this.contact, (result, item) => {
         if (_.indexOf(this.userList, item.name) !== -1) {
@@ -138,18 +139,34 @@ export default {
         item.status = false
         return item
       })
-      let data = {
+      return {
         id: Date.now(),
         creator: this.$store.state.phone,
         title: this.title,
         content: this.content,
+        university: this.university.id,
         startTime: new Date(),
         deadline: this.deadline, // Date格式
         userList: list
       }
-      this.$emit('save', data)
-      this.clearData()
-      this.$emit('update:show', false)
+    },
+    async addRecord () {
+      if (!this.checkState()) {
+        return this.$toast('请填写完整')
+      }
+      let task = this.createTask()
+      // 发起请求
+      try {
+        this.loading = true // 开始加载
+        let result = await addTask({task: task})
+        if (result.status) {
+          this.$emit('save', task)
+          this.clearData()
+          this.$emit('update:show', false)
+        } else this.$toast.fail('发布失败')
+      } catch (e) {
+        this.$toast.fail('发布失败')
+      } finally { this.loading = false }
     },
     toggle (index) {
       this.$refs.checkboxes[index].toggle()

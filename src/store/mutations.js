@@ -22,12 +22,16 @@ export default {
     state.contact = []
     state.task = []
   },
-  // 设置联系人信息
+  // 设置contact
   [type.SET_CONTACT] (state, contact) {
     state.contact = contact
   },
-  // 设置任务信息
+  // 设置task
   [type.SET_TASK] (state, task) {
     state.task = task
+  },
+  // 设置todoList
+  [type.SET_TODOLIST] (state, todoList) {
+    state.todoList = todoList
   }
 }

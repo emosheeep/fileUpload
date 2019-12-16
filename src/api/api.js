@@ -12,7 +12,9 @@ const REGISTER = `${baseURL}/register`
 const UPDATE = `${baseURL}/update`
 const LOGOUT = `${baseURL}/logout`
 const CONTACT = `${baseURL}/update/contact`
-const TASK = `${baseURL}/task`
+const ADDTASK = `${baseURL}/task/add`
+const REMOVETASK = `${baseURL}/task/remove`
+const TODOLIST = `${baseURL}/todoList`
 
 // 发送验证码
 export const sendAuthCode = data => http(AUTH, data, 'POST')
@@ -28,5 +30,8 @@ export const register = data => http(REGISTER, data, 'POST')
 export const update = data => http(UPDATE, data, 'POST')
 // 联系人信息接口
 export const updateContact = data => http(CONTACT, data, 'POST')
-// 添加用户的任务信息
-export const addTask = data => http(TASK, data, 'POST')
+// 用户的任务信息编辑
+export const addTask = data => http(ADDTASK, data, 'POST')
+export const removeTask = data => http(REMOVETASK, data, 'POST')
+// 查询待提交清单
+export const todoList = data => http(TODOLIST, data, 'POST')
