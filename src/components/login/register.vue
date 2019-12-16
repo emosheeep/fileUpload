@@ -32,7 +32,9 @@
           studentID: studentID,
           university: university
         }">
-          <phone submitText="注册" :loading="loading" @submit="register"></phone>
+          <phone submitText="注册" :loading="loading"
+                 ref="phone"
+                 @submit="register"></phone>
         </slot>
       </van-cell-group>
     </div>
@@ -114,6 +116,7 @@ export default {
           code: this.smsCode // 验证码
         })
         this.$toast(data.msg)
+        this.$refs.phone.clear() // 清除电话号码
       } catch (e) {
         console.error(e.message)
         this.$toast('系统错误')

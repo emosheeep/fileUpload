@@ -14,6 +14,7 @@ const LOGOUT = `${baseURL}/logout`
 const CONTACT = `${baseURL}/update/contact`
 const ADDTASK = `${baseURL}/task/add`
 const REMOVETASK = `${baseURL}/task/remove`
+const UPDATETASK = `${baseURL}/task/update`
 const TODOLIST = `${baseURL}/todoList`
 
 // 发送验证码
@@ -33,5 +34,6 @@ export const updateContact = data => http(CONTACT, data, 'POST')
 // 用户的任务信息编辑
 export const addTask = data => http(ADDTASK, data, 'POST')
 export const removeTask = data => http(REMOVETASK, data, 'POST')
+export const updateTask = data => http(UPDATETASK, data, 'POST')
 // 查询待提交清单
 export const todoList = data => http(TODOLIST, data, 'POST')

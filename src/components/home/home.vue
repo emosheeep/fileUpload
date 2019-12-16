@@ -59,7 +59,7 @@
         </van-cell-group>
 <!--        退出登录-->
         <van-button size="large" style="margin-top: 60px"
-                    type="danger"
+                    type="danger" round
                     @click="logout">退出登录</van-button>
       </van-popup>
 <!--      业务模块-->

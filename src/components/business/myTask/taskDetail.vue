@@ -45,11 +45,21 @@
           </van-cell>
         </van-cell-group>
       </van-panel>
+<!--      增加时间-->
+      <van-dialog
+        v-model="addTimeShow"
+        title="选择天数"
+        @confirm="addTime"
+        show-cancel-button >
+        <div class="add-time">
+          <van-stepper v-model="dayNum" min="1" max="10"/>
+        </div>
+      </van-dialog>
     </div>
 </template>
 
 <script>
-import {removeTask} from '../../../api/api'
+import {removeTask, updateTask} from '../../../api/api'
 
 export default {
   name: 'taskDetail',
@@ -58,7 +68,9 @@ export default {
   },
   data () {
     return {
+      addTimeShow: false,
       showAction: false,
+      dayNum: 0, // 延长天数
       active: 0,
       status: false,
       actions: [
@@ -72,18 +84,38 @@ export default {
       return this.task
     },
     time () {
+      // 返回剩余时间
       return new Date(this.task.deadline).getTime() - Date.now()
     }
   },
   methods: {
     onSelect (item, index) {
       switch (index) {
-        case 0: this.addTime(); break
+        case 0: this.addTimeShow = true; break
         case 1: this.onDelete(); break
       }
     },
     addTime () {
-
+      let timeStamp = new Date(this.task.deadline).getTime() + this.dayNum * 24 * 3600 * 1000
+      let deadline = new Date(timeStamp) // 新的截止日期
+      let task = JSON.parse(JSON.stringify(this.curTask))
+      task.deadline = deadline
+      // 开始请求
+      this.$toast.loading({
+        loadingType: 'spinner',
+        duration: 0,
+        forbidClick: true
+      })
+      updateTask({task: task}).then(result => {
+        if (result.status) {
+          this.$emit('edit', task) // 更新本地数据
+          this.curTask.deadline = deadline // 更新视图
+          this.$toast.clear()
+        } else this.$toast.fail('更新失败')
+      }).catch(e => {
+        console.error(e)
+        this.$toast.fail('更新失败')
+      })
     },
     onDelete () {
       this.$dialog.confirm({
@@ -122,4 +154,8 @@ export default {
 .time-info
   padding 10px
   font-size 1.1em
+.add-time
+  height 60px
+  line-height 60px
+  text-align center
 </style>

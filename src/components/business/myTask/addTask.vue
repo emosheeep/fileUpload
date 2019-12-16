@@ -1,5 +1,9 @@
 <template>
   <div>
+    <van-nav-bar
+      title="发布任务"
+      left-arrow
+      @click-left="$emit('update:show', false)" />
     <van-cell-group title="填写信息">
       <van-field v-model="title"
                  label="标题" required
@@ -35,27 +39,30 @@
       </van-popup>
     </van-cell-group>
     <van-checkbox-group v-model="userList">
-      <van-cell-group  title="选择提交人">
+      <van-cell-group  title="选择提交人" :border="false"
+                       style="height: 180px; overflow: auto">
         <van-cell
-          v-for="(item, index) in contactGroups"
+          v-for="(item, index) in contact"
           clickable
-          :key="item"
-          :title="item"
+          :key="index"
+          :title="item.name"
+          :value="`${item.userList.length}人`"
           @click="toggle(index)"
         >
-          <van-checkbox
-            :name="item"
-            ref="checkboxes"
-            slot="right-icon"
-          />
+          <van-checkbox :name="item" slot="right-icon"
+                        ref="checkboxes"
+                        style="margin-left: 10px"/>
         </van-cell>
+        <van-cell v-if="contact.length === 0"
+                  title="请先编辑常用联系人组！"
+                  style="text-align: center; color: red; font-size: 18px"/>
       </van-cell-group>
     </van-checkbox-group>
     <van-button round
                 size="large"
                 type="info"
                 :loading="loading"
-                style="position: fixed; bottom: 5%"
+                style="position: fixed; bottom: 2%"
                 @click="addRecord">发布任务</van-button>
   </div>
 </template>
@@ -92,21 +99,19 @@ export default {
       let day = String(this.tempTime.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
     },
-    contactGroups () {
-      return this.contact.map((item) => {
-        return item.name
-      })
-    },
     ...mapState({
       contact: 'contact',
       university: 'university'
     })
   },
   watch: {
-    tempTime (newVal) {
-      let time = this.getDayTime(newVal) // 时间归零
-      time = time.getTime() + (23 * 3600 + 3599) * 1000 // 当天的23:59秒截止
-      this.deadline = new Date(time)
+    tempTime: {
+      handler (newVal) {
+        let time = this.getDayTime(newVal) // 时间归零
+        time = time.getTime() + (23 * 3600 + 3599) * 1000 // 当天的23:59秒截止
+        this.deadline = new Date(time)
+      },
+      immediate: true
     }
   },
   methods: {
@@ -127,9 +132,10 @@ export default {
       } else return true
     },
     createTask () {
+      let userList = this.userList.map(item => item.name)
       // 获取选中组别包含的所有联系人
       let list = _.reduce(this.contact, (result, item) => {
-        if (_.indexOf(this.userList, item.name) !== -1) {
+        if (_.includes(userList, item.name)) {
           result = result.concat(item.userList)
         }
         return result
@@ -139,6 +145,7 @@ export default {
         item.status = false
         return item
       })
+      console.log(list)
       return {
         id: Date.now(),
         creator: this.$store.state.phone,

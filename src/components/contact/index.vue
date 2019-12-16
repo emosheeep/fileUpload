@@ -67,6 +67,7 @@ export default {
         this.$toast.loading({
           loadingType: 'spinner',
           duration: 0,
+          message: '请稍后',
           forbidClick: true
         })
         try {
@@ -111,8 +112,13 @@ export default {
     },
     // 删除小组
     onDelete (group) {
-      this.showGroupEdit = false
-      this.groupList = this.groupList.filter(item => item.id !== group.id)
+      this.$dialog.confirm({
+        title: '警告',
+        message: '确定删除？'
+      }).then(() => {
+        this.showGroupEdit = false
+        this.groupList = this.groupList.filter(item => item.id !== group.id)
+      }).catch(e => e)
     }
   },
   mounted () {
