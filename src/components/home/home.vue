@@ -2,7 +2,7 @@
     <div>
       <van-nav-bar title="我的主页" right-text="按钮"/>
 <!--      头像模块-->
-      <div class="header" @click="isLogin">
+      <div class="header van-hairline--bottom" @click="isLogin">
         <div class="avatar">
           <van-image round width="5rem" height="5rem" cover
                      src="https://img.yzcdn.cn/vant/cat.jpeg"/>
@@ -20,7 +20,6 @@
           <van-icon name="arrow"></van-icon>
         </div>
       </div>
-      <van-divider style="margin: 0 0 10px 0"/>
       <!--      隐藏层-->
       <van-popup v-model="showInfo" position="right" style="width: 100%; height: 100%">
         <van-nav-bar title="个人信息" left-text="返回" left-arrow
@@ -63,12 +62,11 @@
                     @click="logout">退出登录</van-button>
       </van-popup>
 <!--      业务模块-->
-      <van-grid :column-num="3" clickable >
+      <van-grid :column-num="3" clickable style="margin-top: 30px">
         <van-grid-item icon="todo-list-o" text="待提交" to="/todoList"/>
         <van-grid-item icon="records" text="发布任务" to="/myTask"/>
-        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item icon="contact" text="常用联系人" to="/contact"/>
       </van-grid>
-      <van-cell is-link title="编辑联系人分组" to="/contact"/>
     </div>
 </template>
 

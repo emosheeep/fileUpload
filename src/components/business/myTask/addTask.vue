@@ -8,15 +8,17 @@
       <van-field v-model="title"
                  label="标题" required
                  placeholder="请输入标题"
+                 show-word-limit
+                 maxlength="10"
       />
       <van-field v-model="content"
                  rows="2"
                  autosize
                  label="描述"
                  type="textarea"
-                 maxlength="60"
                  placeholder="简要描述任务要求"
                  show-word-limit
+                 maxlength="60"
       />
       <van-field readonly
                  clickable

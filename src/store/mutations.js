@@ -21,6 +21,7 @@ export default {
     state.university.id = ''
     state.contact = []
     state.task = []
+    state.todoList = []
   },
   // 设置contact
   [type.SET_CONTACT] (state, contact) {

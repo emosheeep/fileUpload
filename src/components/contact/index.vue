@@ -1,10 +1,12 @@
 <template>
     <div>
-      <van-nav-bar title="添加小组" left-arrow
-                   @click-left="$router.push({name: 'home'})"
-                   @click-right="addGroup">
-        <van-icon name="plus" slot="right" />
-      </van-nav-bar>
+      <van-sticky>
+        <van-nav-bar title="添加小组" left-arrow
+                     @click-left="$router.push({name: 'home'})"
+                     @click-right="addGroup">
+          <van-icon name="plus" slot="right" />
+        </van-nav-bar>
+      </van-sticky>
       <van-panel title="我的分组：" :desc="description">
         <group-list
           :list.sync="groupList"

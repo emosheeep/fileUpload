@@ -1,10 +1,12 @@
 <template>
     <div>
-      <van-nav-bar title="添加成员" left-arrow
-                   @click-right="addUser"
-                   @click-left="$emit('update:show', false)">
-        <van-icon name="plus" slot="right" />
-      </van-nav-bar>
+      <van-sticky>
+        <van-nav-bar title="添加成员" left-arrow
+                     @click-right="addUser"
+                     @click-left="$emit('update:show', false)">
+          <van-icon name="plus" slot="right" />
+        </van-nav-bar>
+      </van-sticky>
 <!--      显示联系人信息-->
       <van-panel :title="title" desc="点击右上角添加成员"
                  :status="`共${userList.length}人`">

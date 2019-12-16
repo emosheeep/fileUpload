@@ -6,7 +6,7 @@
         left-arrow
         @click-left="$emit('update:show', false)"
         @click-right="showAction = true">
-        <van-icon name="bars" slot="right" />
+        <van-icon name="bars" slot="right"  v-if="type !== 'preview'"/>
       </van-nav-bar>
       <van-action-sheet
         v-model="showAction"
@@ -25,25 +25,27 @@
             format="剩余时间：DD 天 HH 时 mm 分 ss 秒"
           />
         </div>
-        <van-tabs v-model="active" sticky @change="status = !status">
-          <van-tab title="未提交" />
-          <van-tab title="已完成" />
-        </van-tabs>
-        <van-cell-group>
-          <van-cell v-show="item.status === status"
-            v-for="(item, index) in curTask.userList"
-            :key="index"
-            :title="item.username">
-            <van-tag plain
-                     v-if="status === false"
-                     slot="right-icon"
-                     type="warning">未完成</van-tag>
-            <van-tag plain
-                     v-else
-                     slot="right-icon"
-                     type="success">已提交</van-tag>
-          </van-cell>
-        </van-cell-group>
+        <slot>
+          <van-tabs v-model="active" sticky @change="status = !status">
+            <van-tab title="未提交" />
+            <van-tab title="已完成" />
+          </van-tabs>
+          <van-cell-group>
+            <van-cell v-show="item.status === status"
+                      v-for="(item, index) in curTask.userList"
+                      :key="index"
+                      :title="item.username">
+              <van-tag plain
+                       v-if="status === false"
+                       slot="right-icon"
+                       type="warning">未完成</van-tag>
+              <van-tag plain
+                       v-else
+                       slot="right-icon"
+                       type="success">已提交</van-tag>
+            </van-cell>
+          </van-cell-group>
+        </slot>
       </van-panel>
 <!--      增加时间-->
       <van-dialog
@@ -64,7 +66,8 @@ import {removeTask, updateTask} from '../../../api/api'
 export default {
   name: 'taskDetail',
   props: {
-    task: Object
+    task: Object,
+    type: String
   },
   data () {
     return {
