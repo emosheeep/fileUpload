@@ -143,8 +143,8 @@ export default {
         return result
       }, [])
       list = _.uniqBy(list, 'studentID') // 按照学号去重
-      list = list.map((item) => { // 添加是否提交的状态，默认false，标识未提交
-        item.status = false
+      list = list.map((item) => { // 添加是否提交的状态，0和1
+        item.status = 0
         return item
       })
       console.log(list)
