@@ -26,19 +26,18 @@
           />
         </div>
         <slot>
-          <van-tabs v-model="active" sticky>
+          <van-tabs v-model="active" sticky @change="status = !status">
             <van-tab title="未提交" />
             <van-tab title="已完成" />
           </van-tabs>
           <van-cell-group>
-<!--            通过status和v-show来筛选已完成-->
-            <van-cell v-show="item.status === active"
+<!--            注意这里是字符串的比较-->
+            <van-cell v-show="item.status === status.toString()"
                       v-for="(item, index) in curTask.userList"
                       :key="index"
-                      :title="item.username"
-            >
+                      :title="item.username">
               <van-tag plain
-                       v-if="item.status === 0"
+                       v-if="status === false"
                        slot="right-icon"
                        type="warning">未完成</van-tag>
               <van-tag plain
@@ -77,6 +76,7 @@ export default {
       showAction: false,
       dayNum: 0, // 延长天数
       active: 0,
+      status: false,
       actions: [
         {name: '延长时间', color: 'green'},
         {name: '结束任务', subname: '不可逆'}
