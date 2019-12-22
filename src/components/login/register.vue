@@ -113,7 +113,7 @@ export default {
           studentID: this.studentID,
           phone: this.phone,
           university: this.university,
-          code: this.smsCode // 验证码
+          smsCode: this.smsCode // 验证码
         })
         this.$toast(data.msg)
         this.$refs.phone.clear() // 清除电话号码

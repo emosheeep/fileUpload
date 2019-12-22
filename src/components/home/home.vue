@@ -73,7 +73,7 @@
 <script>
 import {mapState} from 'vuex'
 import _ from 'lodash'
-import {update, logout} from '../../api/api'
+import {updatePhone, updateInfo, logout} from '../../api/api'
 import type from '../../store/mutation-types'
 import register from '../login/register'
 import GroupList from '../contact/groupList'
@@ -131,54 +131,45 @@ export default {
     },
     // 退出登录
     async logout () {
-      let beforeClose = function (action, done) {
+      let beforeClose = (action, done) => {
         if (action === 'confirm') {
-          setTimeout(done, 1000)
+          // 执行登出逻辑
+          logout().then(res => {
+            console.log(res.msg)
+            this.$store.commit(type.CLEAR_USER)
+            done()
+            this.$router.push({name: 'login'})
+          }).catch(e => {
+            this.$toast('网络错误')
+          })
         } else {
           done()
         }
       }
-      try {
-        await this.$dialog.confirm({
-          title: '提示',
-          message: '确认退出?',
-          beforeClose
-        })
-        // 执行登出逻辑
-        let result = await logout()
-        if (result.status) {
-          this.$store.commit(type.CLEAR_USER)
-          this.showInfo = false
-        } else {
-          this.$toast.fail(result.msg)
-        }
-      } catch (e) {}
+      this.$dialog.confirm({
+        title: '提示',
+        message: '确认退出?',
+        beforeClose
+      })
     },
     // 检查数据完整性，不完整返回false
     checkState (info) {
-      // 利用lodash排除空值
+      // 检查数据是否填写完整
       let values = _.values(info) // 对象属性值
-      let result = _.compact(values)
-      if (result.length !== values.length) {
+      let result = _.compact(values) // 去除空值
+      // 判断数据是否发生变化
+      let localUserInfo = _.omit(this.userInfo, 'phone') // 排除电话号码
+      let equal = _.isEqual(localUserInfo, info)
+      // 填写不完整或数据没有变化则返回false
+      if (result.length !== values.length || equal) {
+        this.$toast('信息无变化或不完整')
         return false
       } else return true
     },
     // 修改基本信息 不包括账号（电话号码）
     async updateInfo (userInfo) {
       if (!this.checkState(userInfo)) {
-        return this.$toast('请填写完整')
-      }
-      let localUserInfo = _.clone(this.userInfo)
-      delete localUserInfo.phone // 排除电话号码
-      // 判断除电话号码外其他值是否相等
-      let equal = _.isEqual(localUserInfo, userInfo)
-      if (equal) {
-        return this.$toast('信息没有变化')
-      }
-      let optionUpdate = {
-        type: 'update',
-        condition: { phone: this.phone },
-        data: userInfo
+        return
       }
       // 询问是否修改
       try {
@@ -189,7 +180,11 @@ export default {
       } catch (e) { return }
       try {
         this.loading = true
-        let result = await update(optionUpdate)
+        // 更新请求
+        let result = await updateInfo({
+          phone: this.phone,
+          data: userInfo
+        })
         this.$toast(result.msg)
         if (result.status) {
           // result 为修改成功后的用户数据
@@ -221,10 +216,10 @@ export default {
       } catch (e) { return }
       try {
         this.loading = true
-        let result = await update({
-          type: 'update',
-          condition: { phone: this.phone },
-          data: { phone: phone }
+        let result = await updatePhone({
+          origin: this.phone,
+          phone,
+          smsCode
         })
         this.$toast(result.msg)
         if (result.status) {

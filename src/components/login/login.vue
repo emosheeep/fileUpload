@@ -5,6 +5,7 @@
                label="手机号"
                maxlength="11"
                placeholder="请输入手机号"
+               clearable
                required
                @blur="judgeMobile"
                :error-message="telErrMsg"/>
@@ -68,6 +69,14 @@ export default {
         this.$toast('系统错误')
         this.loading = false
       }
+    }
+  },
+  created () {
+    let user = this.$cookie.get('user')
+    let phone = String(user).slice(2, 13) // 获取签名cookie中的手机号字段
+    if (phone === this.$store.state.phone) {
+      // 登陆过滤，如果已经登陆就跳转到主页
+      this.$router.push({path: '/'})
     }
   }
 }

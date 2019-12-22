@@ -9,7 +9,8 @@ const AUTH = `${baseURL}/auth`
 const UNIVERSITY = `${baseURL}/university`
 const LOGIN = `${baseURL}/login`
 const REGISTER = `${baseURL}/register`
-const UPDATE = `${baseURL}/update`
+const UPDATEPHONE = `${baseURL}/update/phone`
+const UPDATEINFO = `${baseURL}/update/info`
 const LOGOUT = `${baseURL}/logout`
 const CONTACT = `${baseURL}/update/contact`
 const ADDTASK = `${baseURL}/task/add`
@@ -28,7 +29,8 @@ export const logout = () => http(LOGOUT)
 // 注册
 export const register = data => http(REGISTER, data, 'POST')
 // 修改信息
-export const update = data => http(UPDATE, data, 'POST')
+export const updatePhone = data => http(UPDATEPHONE, data, 'POST')
+export const updateInfo = data => http(UPDATEINFO, data, 'POST')
 // 联系人信息接口
 export const updateContact = data => http(CONTACT, data, 'POST')
 // 用户的任务信息编辑
