@@ -67,13 +67,13 @@ npm run build --report
 ```
 
 ### 四、相关截图
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/1.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/2.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/3.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/4.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/5.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/6.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/7.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/8.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/9.jpg)
-![](https://github.com/1446445040/fileUpload/blob/master/README_files/10.jpg)
+![](README_files/1.jpg)
+![](README_files/2.jpg)
+![](README_files/3.jpg)
+![](README_files/4.jpg)
+![](README_files/5.jpg)
+![](README_files/6.jpg)
+![](README_files/7.jpg)
+![](README_files/8.jpg)
+![](README_files/9.jpg)
+![](README_files/10.jpg)
