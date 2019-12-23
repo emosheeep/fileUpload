@@ -22,8 +22,7 @@
       </div>
       <!--      隐藏层-->
       <van-popup v-model="showInfo" position="right" style="width: 100%; height: 100%">
-        <van-nav-bar title="个人信息" left-text="返回" left-arrow
-                     @click-left="showInfo = false" />
+        <van-nav-bar title="个人信息" left-text="返回" left-arrow @click-left="showInfo = false" />
 <!--        基础信息-->
         <van-cell-group title="基本信息" :border="false">
           <van-cell title="账号" :value="phone" />
@@ -48,7 +47,7 @@
                      style="width: 100%; height: 100%">
             <van-nav-bar title="修改信息" left-arrow
                          @click-left="updateShow = false"/>
-            <register :updateShow.sync="updateShow" ref="updateInfo">
+            <register ref="updateInfo">
               <template v-slot:default="userInfo">
                 <van-button size="large" :loading="loading"
                             @click="updateInfo(userInfo.user)">确认修改</van-button>
@@ -73,7 +72,7 @@
 <script>
 import {mapState} from 'vuex'
 import _ from 'lodash'
-import {updatePhone, updateInfo, logout} from '../../api/api'
+import {updatePhone, updateInfo} from '../../api/api'
 import type from '../../store/mutation-types'
 import register from '../login/register'
 import GroupList from '../contact/groupList'
@@ -133,15 +132,12 @@ export default {
     async logout () {
       let beforeClose = (action, done) => {
         if (action === 'confirm') {
-          // 执行登出逻辑
-          logout().then(res => {
-            console.log(res.msg)
-            this.$store.commit(type.CLEAR_USER)
+          // 清楚本地数据
+          this.$store.commit(type.CLEAR_USER)
+          setTimeout(() => {
             done()
             this.$router.push({name: 'login'})
-          }).catch(e => {
-            this.$toast('网络错误')
-          })
+          }, 400)
         } else {
           done()
         }
@@ -223,13 +219,20 @@ export default {
         })
         this.$toast(result.msg)
         if (result.status) {
+          let data = {
+            ...result.data,
+            token: result.token
+          }
+          console.log(data)
           // 更改成功则更新本地数据并返回
-          this.$store.commit(type.UPDATE_USER, result.data)
+          this.$store.commit(type.UPDATE_USER, data)
+          // 本地数据更新
+          this.$store.commit(type.SET_USER_BY_PHONE, data.phone)
           this.$refs.updatePhone.clear()
           this.changePhoneShow = false
         }
       } catch (e) {
-        console.err(e)
+        console.error(e)
         this.$toast.fail('系统错误')
       } finally {
         this.loading = false

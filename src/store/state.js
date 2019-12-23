@@ -2,6 +2,7 @@
  * 状态对象
  */
 export default {
+  token: '', // 认证信息
   username: '',
   studentID: '',
   phone: '',

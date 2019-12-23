@@ -2,10 +2,9 @@
 ajax请求函数模块
 返回promise对象,返回数据response.data
  */
+import store from '../store'
 import axios from 'axios'
 import Qs from 'qs'
-
-axios.defaults.withCredentials = true // 携带cookie
 
 export default function (url, data = {}, type = 'GET') {
   return new Promise(function (resolve, reject) {
@@ -36,3 +35,12 @@ export default function (url, data = {}, type = 'GET') {
     })
   })
 }
+// axios 请求拦截，添加token认证信息
+axios.interceptors.request.use((req) => {
+  // 在 headers 中设置authorization 属性放token
+  console.log(store.state.token)
+  req.headers.authorization = store.state.token
+  console.log(req.headers)
+
+  return req
+}, (e) => Promise.reject(e))

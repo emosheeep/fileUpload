@@ -55,13 +55,18 @@ export default {
       try {
         this.loading = true
         let result = await login(options)
+        let data = {
+          ...result.user,
+          token: result.token
+        }
+        console.log(data)
         if (!result.status) { // 登陆失败
           this.$toast(result.msg)
           this.loading = false
         } else { // 登陆成功
           result.msg && this.$toast(result.msg)
           this.loading = false
-          this.$store.commit(type.UPDATE_USER, result.user)
+          this.$store.commit(type.UPDATE_USER, data)
           this.$router.push({path: '/'}) // 跳转到主页
         }
       } catch (e) {

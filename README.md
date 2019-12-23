@@ -35,9 +35,10 @@
 3. 使用mongoose包连接并操作MongoDB数据库，存储用户数据，包括会话，用户基本信息，任务信息
 4. 使用q模块封装数据库操作（DAO），返回promise对象
 5. 使用body-parser解析post请求体
-6. 使用express-session，cookie-parser，配合connect-mongo持久化用户会话信息，借助会话限制个别接口的访问
+6. 使用jsonwebtoken颁发令牌，访问项目需要携带令牌，进行身份验证
 7. 使用multer包实现文件上传，但考虑到服务器带宽问题，后期决定将文件托管至云服务
 8. 使用xlsx包读取表格中的大学信息，并生成json文件用于提供大学信息
+9. ~~使用express-session，cookie-parser，配合connect-mongo持久化用户会话信息，借助会话限制个别接口的访问~~
 
 ### 二、说明
 这是我第一次正儿八经的开发一个系统，前后端都要负责的情况下，真的要考虑很多问题。在开发的过程中，很多以前不熟悉，

@@ -11,7 +11,6 @@ const LOGIN = `${baseURL}/login`
 const REGISTER = `${baseURL}/register`
 const UPDATEPHONE = `${baseURL}/update/phone`
 const UPDATEINFO = `${baseURL}/update/info`
-const LOGOUT = `${baseURL}/logout`
 const CONTACT = `${baseURL}/update/contact`
 const ADDTASK = `${baseURL}/task/add`
 const REMOVETASK = `${baseURL}/task/remove`
@@ -24,8 +23,6 @@ export const sendAuthCode = data => http(AUTH, data, 'POST')
 export const getUniversity = () => http(UNIVERSITY)
 // 登陆
 export const login = data => http(LOGIN, data, 'POST')
-// 登出
-export const logout = () => http(LOGOUT)
 // 注册
 export const register = data => http(REGISTER, data, 'POST')
 // 修改信息

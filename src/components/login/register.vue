@@ -14,14 +14,14 @@
           @click="chooseSchool"/>
 <!--        选择学校-->
         <van-popup
-          v-model="show"
+          v-model="schoolPickerShow"
           :lazy-render="false"
           position="bottom"
           :duration="0.5"
           style="height: 100%">
           <school-picker
             ref="university"
-            :show.sync="show"
+            :show.sync="schoolPickerShow"
             :school.sync="university"/>
         </van-popup>
 <!--        学校选择结束-->
@@ -46,16 +46,13 @@ import {register} from '../../api/api'
 import SchoolPicker from './schoolPicker'
 export default {
   name: 'register',
-  props: {
-    updateShow: Boolean
-  },
   data () {
     return {
       loading: false, // 按钮加载状态
       isBanned: false, // 验证码按钮状态
       btnText: '发送验证码', // 按钮文字
       smsCode: '', // 短信验证码
-      show: false, // 控制变量
+      schoolPickerShow: false, // 控制变量
       university: {
         name: '',
         id: ''
@@ -81,7 +78,7 @@ export default {
   components: { SchoolPicker, 'phone': () => import('./phone') },
   methods: {
     chooseSchool () {
-      this.show = true
+      this.schoolPickerShow = true
       this.$refs.university.searchText = this.university.name
     },
     // 检查数据完整性，不完整返回false
