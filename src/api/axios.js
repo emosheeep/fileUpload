@@ -27,7 +27,7 @@ export default function (url, data = {}, type = 'GET') {
     }
 
     promise.then(function (result) {
-      // 成功调用resolve
+      // 成功调用resolve,返回数据部分
       resolve(result.data)
     }).catch((err) => {
       // 失败了调用reject
@@ -35,12 +35,10 @@ export default function (url, data = {}, type = 'GET') {
     })
   })
 }
+
 // axios 请求拦截，添加token认证信息
 axios.interceptors.request.use((req) => {
   // 在 headers 中设置authorization 属性放token
-  console.log(store.state.token)
   req.headers.authorization = store.state.token
-  console.log(req.headers)
-
   return req
 }, (e) => Promise.reject(e))

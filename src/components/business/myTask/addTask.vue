@@ -147,7 +147,6 @@ export default {
         item.status = 'false' // 直接使用字符串避免类型转换带来的不便
         return item
       })
-      console.log(list)
       return {
         id: Date.now(),
         creator: this.$store.state.phone,

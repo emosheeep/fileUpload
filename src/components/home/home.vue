@@ -132,8 +132,10 @@ export default {
     async logout () {
       let beforeClose = (action, done) => {
         if (action === 'confirm') {
-          // 清楚本地数据
+          // 清楚用户数据
           this.$store.commit(type.CLEAR_USER)
+          // 清除localStorage缓存
+          window.localStorage.clear()
           setTimeout(() => {
             done()
             this.$router.push({name: 'login'})
@@ -146,7 +148,7 @@ export default {
         title: '提示',
         message: '确认退出?',
         beforeClose
-      })
+      }).catch(e => e)
     },
     // 检查数据完整性，不完整返回false
     checkState (info) {

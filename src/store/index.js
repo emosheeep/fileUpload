@@ -15,9 +15,8 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 const persistedState = createPersistedState({
   key: 'loginUser',
-  storage: new Storage()
+  storage: new Storage((1000 * 3600 * 24) * 10) // 过期时间为一周
 })
-
 export default new Vuex.Store({
   state,
   actions,

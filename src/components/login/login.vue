@@ -11,6 +11,7 @@
                :error-message="telErrMsg"/>
     <van-field v-model="studentID"
                label="学号"
+               clearable
                placeholder="请输入学号"/>
     <van-button plain size="large"
                 :loading="loading"

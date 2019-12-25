@@ -51,6 +51,7 @@ import type from '../../../store/mutation-types'
 import {mapState} from 'vuex'
 import TaskItem from '../myTask/taskItem'
 import TaskDetail from '../myTask/taskDetail'
+import {todoList} from '../../../api/api'
 export default {
   name: 'myTask',
   components: {TaskDetail, TaskItem},
@@ -65,12 +66,23 @@ export default {
   },
   computed: {
     ...mapState({
-      todoList: 'todoList'
+      todoList: 'todoList',
+      studentID: 'studentID'
     })
   },
   methods: {
     onRefresh () {
-      this.$store.dispatch(type.SET_TODOLIST, () => {
+      todoList({
+        studentID: this.studentID
+      }).then(res => {
+        this.$store.commit(type.SET_TODOLIST, res.data)
+      }).catch(e => {
+        console.log(e)
+        if (e.message.indexOf('401') !== -1) {
+          this.$toast('请登录')
+          this.$router.push({name: 'login'})
+        }
+      }).finally(() => {
         this.finished = true
         this.freshLoading = false
       })
@@ -82,12 +94,9 @@ export default {
   },
   mounted () {
     if (this.todoList.length === 0) {
-      this.listLoading = true
       this.finished = false
-      this.$store.dispatch(type.SET_TODOLIST, () => {
-        this.finished = true
-        this.listLoading = false
-      })
+      this.listLoading = true
+      this.onRefresh()
     }
   }
 }
