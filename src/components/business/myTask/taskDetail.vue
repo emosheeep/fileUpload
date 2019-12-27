@@ -25,27 +25,40 @@
             format="剩余时间：DD 天 HH 时 mm 分 ss 秒"
           />
         </div>
+<!--        插槽-->
         <slot>
-          <van-tabs v-model="active" sticky @change="status = !status">
-            <van-tab title="未提交" />
-            <van-tab title="已完成" />
+          <van-button
+            @click="refresh"
+            :loading="loading"
+            size="large"
+            type="primary">点击查看完成情况</van-button>
+          <van-tabs v-model="active"
+                    v-if="completeShow"
+                    animated
+                    sticky
+          >
+            <van-tab title="未提交">
+              <van-cell v-for="(item, index) in curTask.userList"
+                        v-show="filter(item)"
+                        :key="index"
+                        :title="item.username">
+                <van-tag plain
+                         slot="right-icon"
+                         type="warning">未完成</van-tag>
+              </van-cell>
+            </van-tab>
+            <van-tab title="已完成">
+              <van-cell v-for="(item, index) in complete"
+                        :key="index"
+                        :title="item.username"
+                        :value="new Date(item.time).toLocaleDateString()"
+              >
+                <van-tag plain
+                         slot="right-icon"
+                         type="success">已提交</van-tag>
+              </van-cell>
+            </van-tab>
           </van-tabs>
-          <van-cell-group>
-<!--            注意这里是字符串的比较-->
-            <van-cell v-show="item.status === status.toString()"
-                      v-for="(item, index) in curTask.userList"
-                      :key="index"
-                      :title="item.username">
-              <van-tag plain
-                       v-if="status === false"
-                       slot="right-icon"
-                       type="warning">未完成</van-tag>
-              <van-tag plain
-                       v-else
-                       slot="right-icon"
-                       type="success">已提交</van-tag>
-            </van-cell>
-          </van-cell-group>
         </slot>
       </van-panel>
 <!--      增加时间-->
@@ -63,7 +76,7 @@
 
 <script>
 import {removeTask, updateTask} from '../../../api/api'
-
+import upyun from '../../../api/upyun'
 export default {
   name: 'taskDetail',
   props: {
@@ -72,15 +85,17 @@ export default {
   },
   data () {
     return {
+      loading: false,
       addTimeShow: false,
+      completeShow: false, // 显示完成情况
       showAction: false,
       dayNum: 0, // 延长天数
-      active: 0,
-      status: false,
+      active: 0, // 当前项
       actions: [
         {name: '延长时间', color: 'green'},
         {name: '结束任务', subname: '不可逆'}
-      ]
+      ],
+      complete: [] // 已完成人员
     }
   },
   computed: {
@@ -90,6 +105,17 @@ export default {
     time () {
       // 返回剩余时间
       return new Date(this.task.deadline).getTime() - Date.now()
+    },
+    // 筛选未完成的人
+    filter () {
+      return function (user) {
+        for (let item of this.complete) {
+          if (item.studentID === user.studentID) {
+            return false
+          }
+        }
+        return true // 已完成列表中没有找到，说明当前user没有完成，返回true
+      }
     }
   },
   methods: {
@@ -149,6 +175,36 @@ export default {
       let month = String(time.getMonth() + 1).padStart(2, '0')
       let day = String(time.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
+    },
+    // 通过从云存储空间获取信息，判断当前已经提交的人数
+    refresh () {
+      let path = `/upload/${this.task.creator}/${this.task.title}`
+      this.loading = true
+      upyun.listDir(path).then(res => {
+        this.compare(res)
+      }).catch(e => {
+        console.error(e.message)
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    // 比对确定哪些人完成了
+    compare (res) {
+      this.completeShow = true
+      if (!res) {
+        this.complete = []
+        return
+      }
+      this.complete = res.files.map(item => {
+        let filename = item.name
+        let studentID = filename.split('-')[0]
+        let username = filename.match(/-(.*?)\./)[1] // 文件名中匹配姓名
+        return {
+          studentID: studentID,
+          username: username,
+          time: item.time * 1000 // 平台传回的是10位时间戳，需转换为13位才能被正确识别
+        }
+      })
     }
   }
 }

@@ -2,11 +2,15 @@
 ajax请求函数模块
 返回promise对象,返回数据response.data
  */
-import store from '../store'
 import axios from 'axios'
 import Qs from 'qs'
 
-export default function (url, data = {}, type = 'GET') {
+// 本地接口
+axios.defaults.baseURL = 'http://localhost:3001/api'
+// 网络接口
+// axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
+
+export default function (url, data = {}, type = 'GET', headers = {}) {
   return new Promise(function (resolve, reject) {
     // 保存由axios返回的promise对象
     let promise = null
@@ -23,7 +27,7 @@ export default function (url, data = {}, type = 'GET') {
       promise = axios.get(url)
     } else {
       // 发送post请求 序列化为表单数据
-      promise = axios.post(url, Qs.stringify(data))
+      promise = axios.post(url, Qs.stringify(data), { headers })
     }
 
     promise.then(function (result) {
@@ -35,10 +39,3 @@ export default function (url, data = {}, type = 'GET') {
     })
   })
 }
-
-// axios 请求拦截，添加token认证信息
-axios.interceptors.request.use((req) => {
-  // 在 headers 中设置authorization 属性放token
-  req.headers.authorization = store.state.token
-  return req
-}, (e) => Promise.reject(e))

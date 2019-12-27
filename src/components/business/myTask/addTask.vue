@@ -9,7 +9,7 @@
                  label="标题" required
                  placeholder="请输入标题"
                  show-word-limit
-                 maxlength="10"
+                 maxlength="15"
       />
       <van-field v-model="content"
                  rows="2"

@@ -46,12 +46,13 @@
 
 <script>
 import type from '../../../store/mutation-types'
-import AddTask from './addTask'
-import TaskItem from './taskItem'
-import TaskDetail from './taskDetail'
 export default {
   name: 'myTask',
-  components: {TaskDetail, TaskItem, AddTask},
+  components: {
+    TaskDetail: () => import('./taskDetail'),
+    TaskItem: () => import('./taskItem'),
+    AddTask: () => import('./addTask')
+  },
   data () {
     return {
       isLoading: false,

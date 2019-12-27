@@ -27,20 +27,15 @@
 <!--      详情页面-->
       <van-popup
         v-model="detailShow"
+        :lazy-render="true"
         position="bottom"
         style="height: 100%"
       >
         <task-detail :show.sync="detailShow"
                      type="preview"
                      :task="curTask">
-          <van-button
-            type="primary"
-            size="large"
-            plain
-            round
-          >
-            点击提交
-          </van-button>
+<!--          文件上传-->
+          <upload :task="curTask"/>
         </task-detail>
       </van-popup>
     </div>
@@ -52,9 +47,10 @@ import {mapState} from 'vuex'
 import TaskItem from '../myTask/taskItem'
 import TaskDetail from '../myTask/taskDetail'
 import {todoList} from '../../../api/api'
+import Upload from './upload'
 export default {
   name: 'myTask',
-  components: {TaskDetail, TaskItem},
+  components: {Upload, TaskDetail, TaskItem},
   data () {
     return {
       detailShow: false,
@@ -77,7 +73,7 @@ export default {
       }).then(res => {
         this.$store.commit(type.SET_TODOLIST, res.data)
       }).catch(e => {
-        console.log(e)
+        console.warn('身份过期，请重新登录')
         if (e.message.indexOf('401') !== -1) {
           this.$toast('请登录')
           this.$router.push({name: 'login'})

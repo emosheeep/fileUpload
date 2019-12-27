@@ -14,7 +14,9 @@ export default {
   },
   // 清除用户信息
   [type.CLEAR_USER] (state) {
+    state.expires = ''
     state.token = ''
+    state.domain = ''
     state.username = ''
     state.studentID = ''
     state.phone = ''
@@ -23,6 +25,7 @@ export default {
     state.contact = []
     state.task = []
     state.todoList = []
+    console.log('用户信息已清除')
   },
   // 设置contact
   [type.SET_CONTACT] (state, contact) {
