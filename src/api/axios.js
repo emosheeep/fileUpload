@@ -6,9 +6,9 @@ import axios from 'axios'
 import Qs from 'qs'
 
 // 本地接口
-// axios.defaults.baseURL = 'http://localhost:3001/api'
+axios.defaults.baseURL = 'http://localhost:3001/api'
 // 网络接口
-axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
+// axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
 
 export default function (url, data = {}, type = 'GET', headers = {}) {
   return new Promise(function (resolve, reject) {
