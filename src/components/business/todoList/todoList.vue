@@ -1,44 +1,44 @@
 <template>
-    <div>
-      <van-nav-bar
-        title="待提交"
-        left-arrow
-        @click-left="$router.push({name: 'home'})">
-      </van-nav-bar>
-<!--      待提交清单-->
-      <van-pull-refresh
-        v-model="freshLoading"
-        @refresh="onRefresh"
-        style="overflow: visible"
+  <div>
+    <van-nav-bar
+      title="待提交"
+      left-arrow
+      @click-left="$router.push({name: 'home'})">
+    </van-nav-bar>
+    <!--      待提交清单-->
+    <van-pull-refresh
+      v-model="freshLoading"
+      @refresh="onRefresh"
+      style="overflow: visible"
+    >
+      <van-list
+        style="height: 500px"
+        v-model="listLoading"
+        :finished="finished"
+        finished-text="没有更多了"
       >
-        <van-list
-          style="height: 500px"
-          v-model="listLoading"
-          :finished="finished"
-          finished-text="没有更多了"
-        >
-          <task-item v-for="(item, index) in todoList"
-                     :key="index"
-                     :task="item"
-                     @click.native="showDetail(item)"
-          />
-        </van-list>
-      </van-pull-refresh>
-<!--      详情页面-->
-      <van-popup
-        v-model="detailShow"
-        :lazy-render="true"
-        position="bottom"
-        style="height: 100%"
-      >
-        <task-detail :show.sync="detailShow"
-                     type="preview"
-                     :task="curTask">
-<!--          文件上传-->
-          <upload :task="curTask"/>
-        </task-detail>
-      </van-popup>
-    </div>
+        <task-item v-for="(item, index) in todoList"
+                   :key="index"
+                   :task="item"
+                   @click.native="showDetail(item)"
+        />
+      </van-list>
+    </van-pull-refresh>
+    <!--      详情页面-->
+    <van-popup
+      v-model="detailShow"
+      :lazy-render="true"
+      position="bottom"
+      style="height: 100%"
+    >
+      <task-detail :show.sync="detailShow"
+                   type="preview"
+                   :task="curTask">
+        <!--          文件上传-->
+        <upload :task="curTask"/>
+      </task-detail>
+    </van-popup>
+  </div>
 </template>
 
 <script>

@@ -5,7 +5,7 @@ import login from '../components/login/index.vue'
 import todoList from '../components/business/todoList/todoList'
 import myTask from '../components/business/myTask/myTask'
 import contact from '../components/contact/index'
-import download from '../components/business/download/download'
+import files from '../components/business/download/files'
 import preview from '../components/business/download/preview'
 
 Vue.use(Router)
@@ -38,9 +38,9 @@ export default new Router({
       component: contact
     },
     {
-      path: '/download',
-      name: 'download',
-      component: download
+      path: '/files',
+      name: 'files',
+      component: files
     },
     {
       path: '/preview',
