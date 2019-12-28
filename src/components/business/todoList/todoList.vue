@@ -11,32 +11,21 @@
       @refresh="onRefresh"
       style="overflow: visible"
     >
-      <van-list
-        style="height: 500px"
-        v-model="listLoading"
-        :finished="finished"
-        finished-text="没有更多了"
-      >
+      <div style="height: 500px">
         <task-item v-for="(item, index) in todoList"
                    :key="index"
                    :task="item"
                    @click.native="showDetail(item)"
         />
-      </van-list>
+      </div>
     </van-pull-refresh>
     <!--      详情页面-->
     <van-popup
       v-model="detailShow"
       :lazy-render="true"
       position="bottom"
-      style="height: 100%"
     >
-      <task-detail :show.sync="detailShow"
-                   type="preview"
-                   :task="curTask">
-        <!--          文件上传-->
-        <upload :task="curTask"/>
-      </task-detail>
+      <upload :task="curTask" :show.sync="detailShow"/>
     </van-popup>
   </div>
 </template>
@@ -44,19 +33,16 @@
 <script>
 import type from '../../../store/mutation-types'
 import {mapState} from 'vuex'
-import TaskItem from '../myTask/taskItem'
-import TaskDetail from '../myTask/taskDetail'
+import TaskItem from '../task/taskItem'
 import {todoList} from '../../../api/api'
 import Upload from './upload'
 export default {
   name: 'myTask',
-  components: {Upload, TaskDetail, TaskItem},
+  components: {Upload, TaskItem},
   data () {
     return {
       detailShow: false,
-      listLoading: false,
       freshLoading: false,
-      finished: true,
       curTask: {}
     }
   },
@@ -68,6 +54,11 @@ export default {
   },
   methods: {
     onRefresh () {
+      this.$toast.loading({
+        message: '更新数据...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      })
       todoList({
         studentID: this.studentID
       }).then(res => {
@@ -79,8 +70,8 @@ export default {
           this.$router.push({name: 'login'})
         }
       }).finally(() => {
-        this.finished = true
         this.freshLoading = false
+        this.$toast.clear()
       })
     },
     showDetail (task) {
@@ -89,11 +80,7 @@ export default {
     }
   },
   mounted () {
-    if (this.todoList.length === 0) {
-      this.finished = false
-      this.listLoading = true
-      this.onRefresh()
-    }
+    this.onRefresh()
   }
 }
 </script>

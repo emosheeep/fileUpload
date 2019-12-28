@@ -7,5 +7,10 @@ function getHeaderSign (bucket, method, path) {
 }
 
 let bucket = new upyun.Bucket('image-fileupload')
-let client = new upyun.Client(bucket, getHeaderSign)
-export default client
+
+// 通用
+export const client = new upyun.Client(bucket, getHeaderSign)
+// 压缩云端文件
+export const compress = tasks => http('/sign/compress', { tasks }, 'POST')
+// 又拍云cdn缓存刷新
+export const refreshCDN = url => http('/sign/refresh', { url }, 'POST')

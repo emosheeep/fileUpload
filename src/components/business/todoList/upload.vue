@@ -1,5 +1,6 @@
 <template>
   <div>
+    <van-cell :title="task.title" size="large"/>
     <div class="filePicker">
       <van-uploader
         v-model="fileList"
@@ -24,12 +25,13 @@
 </template>
 
 <script>
-import upyun from '../../../api/upyun'
+import {client, refreshCDN} from '../../../api/upyun'
 import {mapState} from 'vuex'
 export default {
   name: 'upload',
   props: {
-    task: Object
+    task: Object,
+    show: Boolean
   },
   data () {
     return {
@@ -40,7 +42,8 @@ export default {
   computed: {
     ...mapState({
       studentID: 'studentID',
-      username: 'username'
+      username: 'username',
+      domain: 'domain'
     }),
     // 返回上传路径
     path () {
@@ -57,11 +60,27 @@ export default {
         return this.$toast('请选择文件')
       }
       let {file} = this.fileList[0]
+      console.dir(file)
+      // 进入加载状态
       this.loading = true
-      upyun.putFile(this.path, file).then(res => {
+      this.$toast.loading({
+        message: '获取数据中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      })
+      // 请求开始
+      client.putFile(this.path, file).then(res => {
         if (res) {
-          this.$toast.success('成功')
-          this.fileList = []
+          this.$emit('update:show', false)
+          // 刷新cdn缓存
+          refreshCDN(this.domain + this.path).then(res => {
+            console.log('缓存刷新成功：', res)
+          }).catch(e =>
+            console.log('缓存刷新失败：', e.message)
+          ).finally(() => {
+            this.fileList = []
+            this.$toast.success('成功')
+          })
         }
       }).catch(e => {
         console.log(e)

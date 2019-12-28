@@ -3,7 +3,7 @@
     <van-nav-bar
       title="发布任务"
       left-arrow
-      @click-left="$emit('update:show', false)" />
+      @click-left="goBack" />
     <van-cell-group title="填写信息">
       <van-field v-model="title"
                  label="标题" required
@@ -73,11 +73,9 @@
 import _ from 'lodash'
 import {mapState} from 'vuex'
 import {addTask} from '../../../api/api'
+import type from '../../../store/mutation-types'
 export default {
   name: 'addTask',
-  props: {
-    show: Boolean
-  },
   data () {
     return {
       loading: false, // 按钮状态
@@ -103,7 +101,8 @@ export default {
     },
     ...mapState({
       contact: 'contact',
-      university: 'university'
+      university: 'university',
+      task: 'task'
     })
   },
   watch: {
@@ -121,8 +120,13 @@ export default {
     getDayTime (time) {
       return new Date(time.getFullYear(), time.getMonth(), time.getDate())
     },
-    // 检查是否填完信息
+    // 检查信息
     checkState () {
+      let title = this.task.filter(item => item.title === this.title)
+      if (title.length !== 0) {
+        this.$toast('任务已存在')
+        return false
+      }
       let data = [
         this.title,
         this.content,
@@ -130,6 +134,7 @@ export default {
       ]
       let result = _.compact(data)
       if (result.length !== data.length) {
+        this.$toast('请填写完整')
         return false
       } else return true
     },
@@ -143,12 +148,8 @@ export default {
         return result
       }, [])
       list = _.uniqBy(list, 'studentID') // 按照学号去重
-      list = list.map((item) => { // 添加是否提交的状态，0和1
-        item.status = 'false' // 直接使用字符串避免类型转换带来的不便
-        return item
-      })
       return {
-        id: Date.now(),
+        id: String(Date.now()),
         creator: this.$store.state.phone,
         title: this.title,
         content: this.content,
@@ -160,7 +161,7 @@ export default {
     },
     async addRecord () {
       if (!this.checkState()) {
-        return this.$toast('请填写完整')
+        return
       }
       let task = this.createTask()
       // 发起请求
@@ -168,9 +169,9 @@ export default {
         this.loading = true // 开始加载
         let result = await addTask({task: task})
         if (result.status) {
-          this.$emit('save', task)
-          this.clearData()
-          this.$emit('update:show', false)
+          this.$store.commit(type.ADD_TASK, task)
+          this.$toast.success('成功')
+          this.goBack()
         } else this.$toast.fail('发布失败')
       } catch (e) {
         this.$toast.fail('发布失败')
@@ -183,6 +184,10 @@ export default {
       this.title = ''
       this.content = ''
       this.userList = []
+    },
+    goBack () {
+      this.clearData()
+      this.$router.go(-1)
     }
   }
 }

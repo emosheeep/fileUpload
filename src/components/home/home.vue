@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="right">
-          <van-icon name="arrow"></van-icon>
+          <van-icon name="arrow" />
         </div>
       </div>
       <!--      隐藏层-->
@@ -63,7 +63,7 @@
 <!--      业务模块-->
       <van-grid :column-num="3" clickable style="margin-top: 30px">
         <van-grid-item icon="todo-list-o" text="待提交" to="/todoList"/>
-        <van-grid-item icon="records" text="发布任务" to="/myTask"/>
+        <van-grid-item icon="records" text="发布任务" to="/task/list"/>
         <van-grid-item icon="down" text="文件下载" to="/files"/>
         <van-grid-item icon="contact" text="常用联系人" to="/contact"/>
       </van-grid>

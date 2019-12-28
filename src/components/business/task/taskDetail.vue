@@ -4,9 +4,9 @@
       <van-nav-bar
         title="任务详情"
         left-arrow
-        @click-left="$emit('update:show', false)"
+        @click-left="$router.go(-1)"
         @click-right="showAction = true">
-        <van-icon name="bars" slot="right"  v-if="type !== 'preview'"/>
+        <van-icon name="bars" slot="right"/>
       </van-nav-bar>
       <van-action-sheet
         v-model="showAction"
@@ -25,41 +25,39 @@
             format="剩余时间：DD 天 HH 时 mm 分 ss 秒"
           />
         </div>
-<!--        插槽-->
-        <slot>
-          <van-button
-            @click="refresh"
-            :loading="loading"
-            size="large"
-            type="primary">点击查看完成情况</van-button>
-          <van-tabs v-model="active"
-                    v-if="completeShow"
-                    animated
-                    sticky
-          >
-            <van-tab title="未提交">
-              <van-cell v-for="(item, index) in curTask.userList"
-                        v-show="filter(item)"
-                        :key="index"
-                        :title="item.username">
-                <van-tag plain
-                         slot="right-icon"
-                         type="warning">未完成</van-tag>
-              </van-cell>
-            </van-tab>
-            <van-tab title="已完成">
-              <van-cell v-for="(item, index) in complete"
-                        :key="index"
-                        :title="item.username"
-                        :value="new Date(item.time).toLocaleDateString()"
-              >
-                <van-tag plain
-                         slot="right-icon"
-                         type="success">已提交</van-tag>
-              </van-cell>
-            </van-tab>
-          </van-tabs>
-        </slot>
+        <van-button
+          @click="refresh"
+          :loading="loading"
+          size="large"
+          type="primary">点击查看完成情况</van-button>
+        <van-tabs v-model="active"
+                  v-if="completeShow"
+                  animated
+                  sticky
+        >
+          <van-tab title="未提交">
+            <van-cell v-for="(item, index) in curTask.userList"
+                      v-show="filter(item)"
+                      :key="index"
+                      :title="item.username">
+              <van-tag plain
+                       slot="right-icon"
+                       type="warning">未完成</van-tag>
+            </van-cell>
+          </van-tab>
+          <van-tab title="已完成">
+            <van-cell v-for="(item, index) in complete"
+                      :key="index"
+                      :title="item.username"
+                      :value="new Date(item.time).toLocaleDateString()"
+            >
+              <van-tag plain
+                       style="margin-left: 10px"
+                       slot="right-icon"
+                       type="success">已提交</van-tag>
+            </van-cell>
+          </van-tab>
+        </van-tabs>
       </van-panel>
 <!--      增加时间-->
       <van-dialog
@@ -68,20 +66,26 @@
         @confirm="addTime"
         show-cancel-button >
         <div class="add-time">
-          <van-stepper v-model="dayNum" min="1" max="10"/>
+          <van-stepper
+            v-model="dayNum"
+            min="1" max="10"
+            input-width="80px"
+            button-size="45px"
+          />
         </div>
       </van-dialog>
     </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import type from '../../../store/mutation-types'
 import {removeTask, updateTask} from '../../../api/api'
-import upyun from '../../../api/upyun'
+import {client} from '../../../api/upyun'
 export default {
   name: 'taskDetail',
   props: {
-    task: Object,
-    type: String
+    title: String
   },
   data () {
     return {
@@ -99,12 +103,16 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      task: 'task'
+    }),
     curTask () {
-      return this.task
+      let curTask = this.task.filter(item => item.title === this.title)
+      return curTask[0]
     },
     time () {
       // 返回剩余时间
-      return new Date(this.task.deadline).getTime() - Date.now()
+      return new Date(this.curTask.deadline).getTime() - Date.now()
     },
     // 筛选未完成的人
     filter () {
@@ -126,7 +134,7 @@ export default {
       }
     },
     addTime () {
-      let timeStamp = new Date(this.task.deadline).getTime() + this.dayNum * 24 * 3600 * 1000
+      let timeStamp = new Date(this.curTask.deadline).getTime() + this.dayNum * 24 * 3600 * 1000
       let deadline = new Date(timeStamp) // 新的截止日期
       let task = JSON.parse(JSON.stringify(this.curTask))
       task.deadline = deadline
@@ -138,9 +146,9 @@ export default {
       })
       updateTask({task: task}).then(result => {
         if (result.status) {
-          this.$emit('edit', task) // 更新本地数据
+          this.$store.commit(type.UPDATE_TASK, task)
           this.curTask.deadline = deadline // 更新视图
-          this.$toast.clear()
+          this.$toast.success('成功')
         } else this.$toast.fail('更新失败')
       }).catch(e => {
         console.error(e)
@@ -150,24 +158,26 @@ export default {
     onDelete () {
       this.$dialog.confirm({
         title: '警告',
-        message: '您确定结束该任务？结束后该任务将被删除'
-      }).then(async () => {
-        try {
-          this.$toast.loading({
-            loadingType: 'spinner',
-            duration: 0,
-            forbidClick: true
-          })
-          let result = await removeTask({task: this.task})
-          if (result.status) {
-            this.$emit('del', this.task)
-            this.$emit('update:show', false)
-          } else this.$toast.fail('删除失败')
-        } catch (e) {
-          console.error(e)
-          this.$toast.fail('删除失败')
-        } finally { this.$toast.clear() } // 停止加载
-      }).catch()
+        message: '您确定结束该任务？结束后该任务将被删除',
+        beforeClose: async (action, done) => {
+          if (action !== 'confirm') {
+            return done()
+          }
+          try {
+            let result = await removeTask({task: this.curTask})
+            if (result.status) {
+              // 提交更改，关闭弹框，返回上一级
+              this.$store.commit(type.DELETE_TASK, this.curTask)
+              done()
+              this.$router.go(-1)
+              this.$toast.success('成功')
+            } else this.$toast.fail('删除失败')
+          } catch (e) {
+            this.$toast.fail('删除失败')
+            console.error(e)
+          }
+        }
+      }).catch(e => e)
     },
     timeFormat (time) {
       time = new Date(time)
@@ -178,9 +188,9 @@ export default {
     },
     // 通过从云存储空间获取信息，判断当前已经提交的人数
     refresh () {
-      let path = `/upload/${this.task.creator}/${this.task.title}`
+      let path = `/upload/${this.curTask.creator}/${this.curTask.title}`
       this.loading = true
-      upyun.listDir(path).then(res => {
+      client.listDir(path).then(res => {
         this.compare(res)
       }).catch(e => {
         console.error(e.message)

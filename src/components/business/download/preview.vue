@@ -48,10 +48,8 @@
 <script>
 import Vue from 'vue'
 import {ImagePreview, Lazyload} from 'vant'
-import upyun from '../../../api/upyun'
+import {client, compress} from '../../../api/upyun'
 import {mapState} from 'vuex'
-import {Base64} from 'js-base64'
-import {compress} from '../../../api/api'
 Vue.use(Lazyload)
 export default {
   name: 'preview',
@@ -75,7 +73,12 @@ export default {
   },
   methods: {
     getFileList () {
-      upyun.listDir(this.path).then(res => {
+      this.$toast.loading({
+        message: '获取数据中...',
+        forbidClick: true,
+        loadingType: 'spinner'
+      })
+      client.listDir(this.path).then(res => {
         if (res) {
           this.images = res.files.map(item => {
             let filename = item.name
@@ -93,6 +96,7 @@ export default {
         console.error(e.message)
       }).finally(() => {
         this.isLoading = false
+        this.$toast.clear()
         if (!navigator.onLine) {
           this.$toast.fail('网络错误')
         }
@@ -111,7 +115,6 @@ export default {
         save_as: `${path}.zip`, // 保存位置
         home_dir: `${path}` // 压缩时不包含的目录
       }]
-      tasks = Base64.encode(JSON.stringify(tasks))
       try {
         let data = await compress(tasks)
         console.log('压缩任务提交成功，任务id:' + data)
@@ -127,7 +130,7 @@ export default {
         loadingType: 'spinner'
       })
       let path = `${this.path}.zip`
-      upyun.headFile(path).then(data => {
+      client.headFile(path).then(data => {
         if (data) { // 存在文件则创建超链接并下载
           this.$toast.clear() // 加载结束
           let a = document.createElement('a')
@@ -150,7 +153,7 @@ export default {
     this.upyunCompress() // 压缩对应文件夹
   },
   destroyed () {
-    upyun.deleteFile(`${this.path}.zip`).then(res => {
+    client.deleteFile(`${this.path}.zip`).then(res => {
       console.log('删除状态：', res)
     }).catch(e => {
       console.log('文件不存在，无需删除')

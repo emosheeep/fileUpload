@@ -31,9 +31,20 @@ export default {
   [type.SET_CONTACT] (state, contact) {
     state.contact = contact
   },
-  // 设置task
-  [type.SET_TASK] (state, task) {
-    state.task = task
+  // 新增task
+  [type.ADD_TASK] (state, task) {
+    state.task.push(task)
+  },
+  // 删除task
+  [type.DELETE_TASK] (state, task) {
+    state.task = state.task.filter(item => {
+      return task.id !== item.id
+    })
+  },
+  [type.UPDATE_TASK] (state, task) {
+    state.task = state.task.map(item => {
+      return task.id === item.id ? task : item
+    })
   },
   // 设置todoList
   [type.SET_TODOLIST] (state, todoList) {
