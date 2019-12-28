@@ -35,12 +35,17 @@ export default {
   [type.ADD_TASK] (state, task) {
     state.task.push(task)
   },
+  // 替换task
+  [type.SET_TASK] (state, task) {
+    state.task = task
+  },
   // 删除task
   [type.DELETE_TASK] (state, task) {
     state.task = state.task.filter(item => {
       return task.id !== item.id
     })
   },
+  // 更新task
   [type.UPDATE_TASK] (state, task) {
     state.task = state.task.map(item => {
       return task.id === item.id ? task : item

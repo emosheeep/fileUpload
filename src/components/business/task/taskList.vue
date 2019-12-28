@@ -25,6 +25,7 @@
 
 <script>
 import {mapState} from 'vuex'
+import type from '../../../store/mutation-types'
 export default {
   name: 'myTask',
   components: {
@@ -46,14 +47,13 @@ export default {
     },
     // 刷新列表数据
     onRefresh () {
-      setTimeout(() => {
-        // 异步TODO查询最新信息
+      this.$store.dispatch(type.SET_TASK, () => {
         this.isLoading = false
-      }, 500)
+      })
     }
   },
   mounted () {
-    this.taskList = this.$store.state.task // 获取任务信息
+    this.$store.dispatch(type.SET_TASK) // 获取任务信息
   }
 }
 </script>
