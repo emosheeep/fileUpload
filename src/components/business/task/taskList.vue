@@ -55,7 +55,6 @@ export default {
   },
   // 自动查询操作需要节流
   created: throttle(function () {
-    console.log(this)
     this.$store.dispatch(type.SET_TASK) // 获取任务信息
   }, 60 * 1000)
 }

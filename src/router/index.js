@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store/index'
+
+// 路由组件
 import index from '../components/index.vue'
+import info from '../components/home/info'
 import login from '../components/login/index.vue'
 import todoList from '../components/business/todoList/todoList'
 import myTask from '../components/business/task/taskList'
@@ -13,12 +17,17 @@ import taskDetail from '../components/business/task/taskDetail'
 
 Vue.use(Router)
 
-export default new Router({
+export const router = new Router({
   routes: [
     {
       path: '/',
       name: 'home',
       component: index
+    },
+    {
+      path: '/info',
+      name: 'info',
+      component: info
     },
     {
       path: '/login',
@@ -71,4 +80,17 @@ export default new Router({
     }
   ],
   mode: 'history'
+})
+
+// 路由拦截（登陆状态）
+router.beforeEach((to, from, next) => {
+  if (store.state.token.length !== 0) {
+    next()
+  } else {
+    if (to.name === 'login') {
+      next()
+    }
+    next({name: 'login', replace: true})
+    console.log('请先登录')
+  }
 })

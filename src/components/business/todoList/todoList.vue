@@ -65,10 +65,6 @@ export default {
         this.$store.commit(type.SET_TODOLIST, res.data)
       }).catch(e => {
         console.warn('身份过期，请重新登录')
-        if (e.message.indexOf('401') !== -1) {
-          this.$toast('请登录')
-          this.$router.push({name: 'login'})
-        }
       }).finally(() => {
         this.freshLoading = false
         this.$toast.clear()
