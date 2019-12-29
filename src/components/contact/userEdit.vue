@@ -9,6 +9,7 @@
 
     <van-field
       v-model="studentID"
+      clearable
       label="学号"
       placeholder="请输入学号"
     />
@@ -21,9 +22,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'userEdit',
   props: {
+    groupName: String,
     user: Object,
     type: String
   },
@@ -51,11 +54,36 @@ export default {
         studentID: this.studentID,
         id: this.id
       }
-    }
+    },
+    ...mapState({
+      existedID (state) {
+        let group = state.contact.find(item => item.name === this.groupName)
+        return group.userList.map(item => item.studentID)
+      }
+    })
   },
   methods: {
+    checkState () {
+      if (this.studentID === '' || this.username === '') {
+        this.$toast('请填写完整')
+        return false
+      }
+      if (this.type === 'edit') {
+        return true // 编辑模式不校验
+      }
+      // 添加模式
+      for (let id of this.existedID) {
+        if (id === this.studentID) {
+          this.$toast('该学号已经存在')
+          return false
+        }
+      }
+      return true
+    },
     save () {
-      this.$emit('save', this.userInfo)
+      if (this.checkState()) {
+        this.$emit('save', this.userInfo)
+      }
     },
     remove () {
       this.$emit('del', this.userInfo)

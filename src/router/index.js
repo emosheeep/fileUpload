@@ -7,15 +7,17 @@ import index from '../components/index.vue'
 import home from '../components/home/home'
 import explore from '../components/home/explore'
 import info from '../components/home/info'
-import login from '../components/login/index.vue'
+import login from '../components/login'
 import todoList from '../components/business/todoList/todoList'
 import myTask from '../components/business/task/taskList'
-import contact from '../components/contact/index'
 import files from '../components/business/download/files'
 import preview from '../components/business/download/preview'
 import addTask from '../components/business/task/addTask'
-import task from '../components/business/task/index'
+import task from '../components/business/task'
 import taskDetail from '../components/business/task/taskDetail'
+import contact from '../components/contact'
+import groupList from '../components/contact/groupList'
+import groupUserList from '../components/contact/groupUserList'
 
 Vue.use(Router)
 
@@ -85,7 +87,20 @@ export const router = new Router({
     {
       path: '/contact',
       name: 'contact',
-      component: contact
+      component: contact,
+      children: [
+        {
+          path: 'groups',
+          name: 'groups',
+          component: groupList
+        },
+        {
+          path: 'members',
+          name: 'members',
+          component: groupUserList,
+          props: route => ({title: route.query.title})
+        }
+      ]
     },
     {
       path: '/files',

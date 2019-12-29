@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   name: 'groupEdit',
   props: {
@@ -30,7 +31,7 @@ export default {
     }
   },
   watch: {
-    group: {
+    group: { // 初始化组件信息
       handler (newVal) {
         this.name = newVal.name
         this.id = newVal.id
@@ -40,6 +41,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      groupName: state => state.contact.map(item => item.name)
+    }),
     userInfo () {
       return {
         name: this.name,
@@ -49,8 +53,27 @@ export default {
     }
   },
   methods: {
+    checkState () {
+      if (this.name === '') {
+        this.$toast('请填写完整')
+        return false
+      }
+      if (this.type === 'edit') {
+        return true // 编辑模式不继续校验
+      }
+      // 添加模式
+      for (let name of this.groupName) {
+        if (name === this.name) {
+          this.$toast('该小组已经存在')
+          return false
+        }
+      }
+      return true
+    },
     save () {
-      this.$emit('save', this.userInfo)
+      if (this.checkState()) {
+        this.$emit('save', this.userInfo)
+      }
     },
     remove () {
       this.$emit('del', this.userInfo)

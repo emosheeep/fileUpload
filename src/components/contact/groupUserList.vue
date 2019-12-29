@@ -3,7 +3,7 @@
       <van-sticky>
         <van-nav-bar title="添加成员" left-arrow
                      @click-right="addUser"
-                     @click-left="$emit('update:show', false)">
+                     @click-left="$router.go(-1)">
           <van-icon name="plus" slot="right" />
         </van-nav-bar>
       </van-sticky>
@@ -19,6 +19,7 @@
 <!--      编辑联系人信息-->
       <van-popup v-model="showUserEdit" position="bottom" round>
         <user-edit
+          :group-name="title"
           :type="type"
           :user="editingUser"
           @save="onSave"
@@ -31,13 +32,13 @@
 <script>
 import UserEdit from './userEdit'
 import UserList from './userList'
+import {mapState} from 'vuex'
+import type from '../../store/mutation-types'
 export default {
   name: 'groupUserList',
   components: {UserList, UserEdit},
   props: {
-    title: String,
-    groupUser: Object,
-    show: Boolean
+    title: String
   },
   data () {
     return {
@@ -47,20 +48,19 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      contact: state => state.contact,
+      phone: state => state.phone,
+      group (state) {
+        return state.contact.find(item => this.title === item.name)
+      }
+    }),
+    // 决定子组件功能
     type () {
       return this.chosenUserId !== null ? 'edit' : 'add'
     },
-    userList: {
-      get () {
-        return this.groupUser.userList
-      },
-      set (newVal) { // newVal更新后的userList
-        this.$emit('update', {
-          id: this.groupUser.id,
-          name: this.groupUser.name,
-          userList: newVal
-        })
-      }
+    userList () {
+      return this.group.userList
     }
   },
   methods: {
@@ -82,18 +82,37 @@ export default {
     // 保存联系人
     onSave (user) {
       this.showUserEdit = false
+      let list = [] // 存放修改过,或新增的用户列表
       if (this.type === 'edit') {
-        this.userList = this.userList.map(item => item.id === user.id ? user : item)
+        list = this.userList.map(item => item.id === user.id ? user : item)
       } else {
-        let list = JSON.parse(JSON.stringify(this.userList))
+        list = JSON.parse(JSON.stringify(this.userList))
         list.push(user)
-        this.userList = list // 必须要用赋值操作才能触发setter
       }
+      this.saveToState(list)
     },
     // 删除联系人
     onDelete (user) {
       this.showUserEdit = false
-      this.userList = this.userList.filter(item => item.id !== user.id)
+      // list为删减后的列表
+      let list = this.userList.filter(item => item.id !== user.id)
+      this.saveToState(list)
+    },
+    // 将改变后的该分组信息映射到vuex中
+    saveToState (list) {
+      // 构建小组信息
+      let group = {
+        id: this.group.id,
+        name: this.group.name,
+        userList: list
+      }
+      let contact = JSON.parse(JSON.stringify(this.contact))
+      // 映射当前分组的信息变化
+      contact = contact.map(item => item.id === group.id ? group : item)
+      this.$store.dispatch(type.SET_CONTACT, {
+        contact,
+        toast: this.$toast
+      })
     }
   }
 }
