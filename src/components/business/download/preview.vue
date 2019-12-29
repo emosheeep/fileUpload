@@ -87,7 +87,8 @@ export default {
             return {
               studentID: studentID,
               username: username,
-              src: `${this.domain}${this.path}/${item.name}`,
+              // 增加一个query参数防止图片被浏览器缓存
+              src: `${this.domain}${this.path}/${item.name}?time=${Date.now()}`,
               time: item.time * 1000 // 平台传回的是10位时间戳，需转换为13位才能被正确识别
             }
           })
@@ -117,7 +118,7 @@ export default {
       }]
       try {
         let data = await compress(tasks)
-        console.log('压缩任务提交成功，任务id:' + data)
+        console.log('压缩任务已提交：' + data)
       } catch (e) {
         console.error(e)
       }
@@ -131,15 +132,11 @@ export default {
       })
       let path = `${this.path}.zip`
       client.headFile(path).then(data => {
-        if (data) { // 存在文件则创建超链接并下载
+        if (data) { // 存在文件下载
           this.$toast.clear() // 加载结束
-          let a = document.createElement('a')
-          a.style.display = 'none'
-          a.href = this.domain + path
-          document.body.append(a)
-          a.click()
-          a.remove() // 点击后移除并且释放内存
-          a = null
+          let feature = 'width=1, height=1, top=5000, left=5000'
+          let newWin = window.open(this.domain + path, '', feature)
+          newWin.document.execCommand('SaveAs')
         } else {
           // 否则稍后重新尝试
           console.warn('正在压缩，请稍后')
@@ -156,7 +153,7 @@ export default {
     client.deleteFile(`${this.path}.zip`).then(res => {
       console.log('删除状态：', res)
     }).catch(e => {
-      console.log('文件不存在，无需删除')
+      console.log(e)
     })
   }
 }

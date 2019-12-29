@@ -4,6 +4,8 @@ import store from '../store/index'
 
 // 路由组件
 import index from '../components/index.vue'
+import home from '../components/home/home'
+import explore from '../components/home/explore'
 import info from '../components/home/info'
 import login from '../components/login/index.vue'
 import todoList from '../components/business/todoList/todoList'
@@ -21,8 +23,26 @@ export const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: index
+      component: index,
+      beforeEnter: (to, from, next) => { // 跳转
+        if (to.fullPath === '/') {
+          next({name: 'home', replace: true})
+        } else {
+          next()
+        }
+      },
+      children: [
+        {
+          path: 'explore',
+          name: 'explore',
+          component: explore
+        },
+        {
+          path: 'home',
+          name: 'home',
+          component: home
+        }
+      ]
     },
     {
       path: '/info',
@@ -82,7 +102,7 @@ export const router = new Router({
   mode: 'history'
 })
 
-// 路由拦截（登陆状态）
+// 全局路由拦截（主要针对登陆状态, 判断是否具有后端token）
 router.beforeEach((to, from, next) => {
   if (store.state.token.length !== 0) {
     next()

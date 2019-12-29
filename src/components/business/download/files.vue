@@ -9,8 +9,10 @@
        <van-cell
          is-link
          size="large"
-         v-for="(item, index) in task" :key="index"
+         icon="description"
          :title="item.title"
+         :label="shortDesc(item.content)"
+         v-for="(item, index) in task" :key="index"
          @click="preview(item.title)"
        />
      </van-cell-group>
@@ -31,7 +33,14 @@ export default {
       task: 'task',
       phone: 'phone',
       domain: 'domain'
-    })
+    }),
+    shortDesc () {
+      return function (content) {
+        if (content.length > 22) {
+          return content.substring(0, 22) + '...'
+        } else return content
+      }
+    }
   },
   methods: {
     preview (title) {

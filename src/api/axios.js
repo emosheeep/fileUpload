@@ -18,15 +18,8 @@ export default function (url, data = {}, type = 'GET',
     let promise = null
     if (type === 'GET') {
       // 准备url query数据
-      let dataStr = '' // 数据拼接字符串
-      Object.keys(data).forEach(key => {
-        dataStr += (key + '=' + data[key] + '&')
-      })
-      if (dataStr !== '') {
-        dataStr = dataStr.substring(0, dataStr.lastIndexOf('&'))
-        url = `${url}?${dataStr}`
-      }
-      promise = axios.get(url)
+      url = `${url}?${Qs.stringify(data)}`
+      promise = axios.get(url, {headers})
     } else {
       // 发送post请求 序列化为表单数据
       promise = axios.post(url, Qs.stringify(data), { headers })
