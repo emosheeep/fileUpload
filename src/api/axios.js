@@ -7,9 +7,9 @@ import Qs from 'qs'
 import store from '../store'
 
 // 本地接口
-axios.defaults.baseURL = 'http://localhost:3001/api'
+// axios.defaults.baseURL = 'http://localhost:3001/api'
 // 网络接口
-// axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
+axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
 
 export default function (url, data = {}, type = 'GET',
   headers = {authorization: store.state.token}) {
