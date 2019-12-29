@@ -10,6 +10,7 @@
     <van-field
       v-model="studentID"
       clearable
+      type="number"
       label="学号"
       placeholder="请输入学号"
     />

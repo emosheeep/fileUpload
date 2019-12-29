@@ -59,6 +59,13 @@ export const router = new Router({
     {
       path: '/task',
       name: 'task',
+      beforeEnter: (to, from, next) => { // 跳转
+        if (to.name === 'task') {
+          next({name: 'list', replace: true})
+        } else {
+          next()
+        }
+      },
       component: task,
       children: [
         {
@@ -80,14 +87,16 @@ export const router = new Router({
       ]
     },
     {
-      path: '/todoList',
-      name: 'todoList',
-      component: todoList
-    },
-    {
       path: '/contact',
       name: 'contact',
       component: contact,
+      beforeEnter: (to, from, next) => { // 跳转
+        if (to.name === 'contact') {
+          next({name: 'groups', replace: true})
+        } else {
+          next()
+        }
+      },
       children: [
         {
           path: 'groups',
@@ -101,6 +110,11 @@ export const router = new Router({
           props: route => ({title: route.query.title})
         }
       ]
+    },
+    {
+      path: '/todoList',
+      name: 'todoList',
+      component: todoList
     },
     {
       path: '/files',
