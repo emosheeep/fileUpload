@@ -78,12 +78,12 @@ export default {
           }).catch(e =>
             console.log('缓存刷新失败：', e.message)
           ).finally(() => {
-            this.fileList = []
+            this.fileList.length = 0
             this.$toast.success('成功')
           })
         }
       }).catch(e => {
-        console.log(e)
+        console.error(e)
         this.$toast.fail('系统错误')
       }).finally(() => {
         this.loading = false

@@ -64,7 +64,7 @@ export default {
       }).then(res => {
         this.$store.commit(type.SET_TODOLIST, res.data)
       }).catch(e => {
-        console.warn('身份过期，请重新登录')
+        console.error(e)
       }).finally(() => {
         this.freshLoading = false
         this.$toast.clear()

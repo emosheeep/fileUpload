@@ -134,9 +134,13 @@ export default {
       client.headFile(path).then(data => {
         if (data) { // 存在文件下载
           this.$toast.clear() // 加载结束
-          let feature = 'width=1, height=1, top=5000, left=5000'
-          let newWin = window.open(this.domain + path, '', feature)
-          newWin.document.execCommand('SaveAs')
+          let a = document.createElement('a')
+          a.href = (this.domain + path) // 创建超链接,下载文件
+          a.style.display = 'none'
+          document.body.append(a)
+          a.click()
+          a.remove()
+          a = null
         } else {
           // 否则稍后重新尝试
           console.warn('正在压缩，请稍后')

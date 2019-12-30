@@ -81,7 +81,7 @@ export default {
       if (this.type === 'edit') {
         contact = this.contact.map(item => item.id === group.id ? group : item)
       } else {
-        contact = JSON.parse(JSON.stringify(this.contact))
+        contact = this.contact.slice(0)
         contact.push(group)
       }
       this.saveToState(contact)

@@ -86,7 +86,7 @@ export default {
       if (this.type === 'edit') {
         list = this.userList.map(item => item.id === user.id ? user : item)
       } else {
-        list = JSON.parse(JSON.stringify(this.userList))
+        list = this.userList.slice(0)
         list.push(user)
       }
       this.saveToState(list)
@@ -106,7 +106,7 @@ export default {
         name: this.group.name,
         userList: list
       }
-      let contact = JSON.parse(JSON.stringify(this.contact))
+      let contact = this.contact.slice(0)
       // 映射当前分组的信息变化
       contact = contact.map(item => item.id === group.id ? group : item)
       this.$store.dispatch(type.SET_CONTACT, {
