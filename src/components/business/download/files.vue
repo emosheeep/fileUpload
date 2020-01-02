@@ -1,10 +1,12 @@
 <template>
    <div>
-     <van-nav-bar
-       title="文件下载"
-       left-arrow
-       @click-left="$router.push({name: 'home'})">
-     </van-nav-bar>
+     <van-sticky>
+       <van-nav-bar
+         title="文件下载"
+         left-arrow
+         @click-left="$router.push({name: 'home'})">
+       </van-nav-bar>
+     </van-sticky>
      <van-cell-group>
        <van-cell
          is-link

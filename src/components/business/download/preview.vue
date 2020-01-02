@@ -1,12 +1,14 @@
 <template>
     <div>
-      <van-nav-bar
-        title="预览"
-        right-text="全部下载"
-        left-arrow
-        @click-left="$router.go(-1)"
-        @click-right="createLink"
-      />
+      <van-sticky>
+        <van-nav-bar
+          title="预览"
+          right-text="全部下载"
+          left-arrow
+          @click-left="$router.go(-1)"
+          @click-right="createLink"
+        />
+      </van-sticky>
       <van-pull-refresh
         v-model="isLoading"
         @refresh="getFileList"

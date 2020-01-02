@@ -2,10 +2,9 @@
  * 状态对象
  */
 export default {
-  expires: Date.now() + 7 * 3600 * 24 * 1000, // 过期时间为七天后
-  // expires: Date.now() + 24 * 1000, // 过期时间为七天后
+  expires: '', // 过期时间为七天后
   token: '', // 认证信息
-  domain: 'http://file.biubiubius.com', // 文件域名
+  domain: '', // CDN域名
   username: '',
   studentID: '',
   phone: '',

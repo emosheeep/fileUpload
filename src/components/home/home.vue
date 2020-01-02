@@ -1,6 +1,6 @@
 <template>
     <div>
-      <van-nav-bar title="我的主页" right-text="按钮"/>
+      <van-nav-bar title="我的主页"/>
 <!--      头像模块-->
       <div class="header van-hairline--bottom" @click="$router.push({name: 'info'})">
         <div class="avatar">

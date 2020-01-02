@@ -47,14 +47,14 @@ export const router = new Router({
       ]
     },
     {
-      path: '/info',
-      name: 'info',
-      component: info
-    },
-    {
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/info',
+      name: 'info',
+      component: info
     },
     {
       path: '/task',
@@ -133,7 +133,7 @@ export const router = new Router({
 
 // 全局路由拦截（主要针对登陆状态, 判断是否具有后端token）
 router.beforeEach((to, from, next) => {
-  if (store.state.token.length !== 0) {
+  if (Date.now() <= store.state.expires) {
     next()
   } else {
     if (to.name === 'login') {

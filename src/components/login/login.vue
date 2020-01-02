@@ -56,33 +56,21 @@ export default {
       try {
         this.loading = true
         let result = await login(options)
-        let data = {
-          ...result.user,
-          token: result.token
-        }
-        console.log(data)
         if (!result.status) { // 登陆失败
           this.$toast(result.msg)
-          this.loading = false
         } else { // 登陆成功
           result.msg && this.$toast(result.msg)
-          this.loading = false
-          this.$store.commit(type.UPDATE_USER, data)
-          this.$router.push({path: '/'}) // 跳转到主页
+          this.$store.commit(type.UPDATE_USER, result.user)
+          this.$router.push({name: 'home'}, () => {
+            console.log('登陆成功')
+          }, e => e) // 跳转到主页
         }
       } catch (e) {
         console.error(e.message)
         this.$toast('系统错误')
+      } finally {
         this.loading = false
       }
-    }
-  },
-  created () {
-    let user = this.$cookie.get('user')
-    let phone = String(user).slice(2, 13) // 获取签名cookie中的手机号字段
-    if (phone === this.$store.state.phone) {
-      // 登陆过滤，如果已经登陆就跳转到主页
-      this.$router.push({path: '/'})
     }
   }
 }

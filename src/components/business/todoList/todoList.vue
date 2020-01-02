@@ -1,17 +1,19 @@
 <template>
   <div>
-    <van-nav-bar
-      title="待提交"
-      left-arrow
-      @click-left="$router.push({name: 'home'})">
-    </van-nav-bar>
+    <van-sticky>
+      <van-nav-bar
+        title="待提交"
+        left-arrow
+        @click-left="$router.push({name: 'home'})">
+      </van-nav-bar>
+    </van-sticky>
     <!--      待提交清单-->
     <van-pull-refresh
       v-model="freshLoading"
       @refresh="onRefresh"
       style="overflow: visible"
     >
-      <div style="height: 500px">
+      <div style="min-height: 90vh">
         <task-item v-for="(item, index) in todoList"
                    :key="index"
                    :task="item"

@@ -1,12 +1,14 @@
 <template>
     <div>
-      <van-nav-bar
-        title="我发布的"
-        left-arrow
-        @click-left="$router.push({name: 'home'})"
-        @click-right="$router.push({name: 'addTask'})">
-        <van-icon name="plus" slot="right" />
-      </van-nav-bar>
+      <van-sticky>
+        <van-nav-bar
+          title="我发布的"
+          left-arrow
+          @click-left="$router.push({name: 'home'})"
+          @click-right="$router.push({name: 'addTask'})">
+          <van-icon name="plus" slot="right" />
+        </van-nav-bar>
+      </van-sticky>
 <!--      已发布记录显示-->
       <van-pull-refresh style="overflow: visible"
         v-model="isLoading"
@@ -62,7 +64,7 @@ export default {
 
 <style scoped lang="stylus">
 .task-item-box
-  height 500px
+  min-height: 90vh
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
