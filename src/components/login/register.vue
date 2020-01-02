@@ -95,31 +95,33 @@ export default {
         return false
       } else return true
     },
-    async register (data) {
+    register (data) {
       // 将子组件传来的值
       this.phone = data.phone
       this.smsCode = data.smsCode
       if (!this.checkState()) {
         return this.$toast('请填写完整信息')
       }
-      try {
-        this.loading = true
-        // 用户注册
-        let data = await register({
-          username: this.username,
-          studentID: this.studentID,
-          phone: this.phone,
-          university: this.university,
-          smsCode: this.smsCode // 验证码
-        })
-        this.$toast(data.msg)
+      this.loading = true
+      // 用户注册
+      register({
+        username: this.username,
+        studentID: this.studentID,
+        phone: this.phone,
+        university: this.university,
+        smsCode: this.smsCode // 验证码
+      }).then(data => {
+        data.msg && this.$toast(data.msg)
         this.$refs.phone.clear() // 清除电话号码
-      } catch (e) {
-        console.error(e.message)
-        this.$toast('系统错误')
-      } finally {
+      }).catch(e => {
+        if (e.data) {
+          this.$toast(e.data.msg)
+        } else {
+          this.$toast('系统错误')
+        }
+      }).finally(() => {
         this.loading = false // 停止加载
-      }
+      })
     },
     // 根据场景设置表单值
     setUserInfo (data) {

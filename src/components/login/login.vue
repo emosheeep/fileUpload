@@ -49,28 +49,26 @@ export default {
       if (!this.checkState()) {
         return this.$toast('请填写正确信息')
       }
-      let options = {
+      this.loading = true
+      login({
         phone: this.phone,
         studentID: this.studentID
-      }
-      try {
-        this.loading = true
-        let result = await login(options)
-        if (!result.status) { // 登陆失败
-          this.$toast(result.msg)
-        } else { // 登陆成功
-          result.msg && this.$toast(result.msg)
-          this.$store.commit(type.UPDATE_USER, result.user)
-          this.$router.push({name: 'home'}, () => {
-            console.log('登陆成功')
-          }, e => e) // 跳转到主页
+      }).then(result => {
+        result.msg && this.$toast(result.msg)
+        this.$store.commit(type.UPDATE_USER, result.user)
+        this.$router.push({name: 'home'}, () => {
+          console.log('登陆成功')
+        }, e => e) // 跳转到主页
+      }).catch(e => {
+        if (e.data) {
+          this.$toast(e.data.msg)
+        } else {
+          console.error(e.message)
+          this.$toast('系统错误')
         }
-      } catch (e) {
-        console.error(e.message)
-        this.$toast('系统错误')
-      } finally {
+      }).finally(() => {
         this.loading = false
-      }
+      })
     }
   }
 }

@@ -131,15 +131,16 @@ export const router = new Router({
   mode: 'history'
 })
 
-// 全局路由拦截（主要针对登陆状态, 判断是否具有后端token）
+// 全局路由拦截（主要针对登陆状态）
 router.beforeEach((to, from, next) => {
   if (Date.now() <= store.state.expires) {
     next()
   } else {
     if (to.name === 'login') {
       next()
+    } else {
+      next({name: 'login', replace: true})
+      console.log('请先登录')
     }
-    next({name: 'login', replace: true})
-    console.log('请先登录')
   }
 })
