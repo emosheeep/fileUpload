@@ -72,7 +72,6 @@ export default {
       this.$cookie.set('curPhone', this.phone, {
         expires: new Date(new Date().getTime() + 1000 * time)
       })
-      console.log('cookie')
       this.isBanned = true
       this.btnText = `${time}秒后重发`
       // 计时器

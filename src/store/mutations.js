@@ -55,7 +55,7 @@ export default {
   [type.SET_TODOLIST] (state, todoList) {
     state.todoList = todoList
   },
-  // 服务器端更新手机号码之后，本地同步更新
+  // 服务器端更新手机号码之后，本地同步更新任务和待提交清单
   [type.SET_USER_BY_PHONE] (state, phone) {
     // 更新每个任务的创建人信息
     state.task = state.task.map(item => {

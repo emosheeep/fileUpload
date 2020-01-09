@@ -1,9 +1,9 @@
 <template>
   <div>
     <van-nav-bar
+      left-arrow
       title="个人信息"
       left-text="返回"
-      left-arrow
       @click-left="$router.go(-1)" />
     <!--        基础信息-->
     <van-cell-group title="基本信息" :border="false">
@@ -18,29 +18,49 @@
       <van-cell title="换绑手机号" is-link @click="showPhoneChange" />
       <van-popup v-model="changePhoneShow" position="right" :lazy-render="false"
                  style="width: 100%; height: 100%">
-        <van-nav-bar title="修改信息" left-arrow
-                     @click-left="changePhoneShow = false"/>
-        <phone submitText="确认" :loading="loading"
-               @submit="updatePhone" ref="updatePhone" />
+        <van-nav-bar
+          title="修改信息"
+          left-arrow
+          @click-left="changePhoneShow = false"
+        />
+          <phone
+            ref="updatePhone"
+            submitText="确认"
+            :loading="loading"
+            @submit="updatePhone"
+          />
       </van-popup>
       <!--        修改基础信息-->
       <van-cell title="修改资料" is-link @click="showUpdate" />
-      <van-popup v-model="updateShow" position="right" :lazy-render="false"
-                 style="width: 100%; height: 100%">
-        <van-nav-bar title="修改信息" left-arrow
-                     @click-left="updateShow = false"/>
-        <register ref="updateInfo">
-          <template v-slot:default="userInfo">
-            <van-button size="large" :loading="loading"
-                        @click="updateInfo(userInfo.user)">确认修改</van-button>
-          </template>
-        </register>
+      <van-popup
+        v-model="updateShow"
+        position="right"
+        :lazy-render="false"
+        style="width: 100%; height: 100%"
+      >
+        <van-nav-bar
+          left-arrow
+          title="修改信息"
+          @click-left="updateShow = false"
+        />
+          <register ref="updateInfo">
+            <template v-slot:default="userInfo">
+              <van-button
+                size="large"
+                :loading="loading"
+                @click="updateInfo(userInfo.user)"
+              >确认修改</van-button>
+            </template>
+          </register>
       </van-popup>
     </van-cell-group>
     <!--        退出登录-->
-    <van-button size="large" style="margin-top: 60px"
-                type="danger" round
-                @click="logout">退出登录</van-button>
+    <van-button
+      size="large"
+      style="margin-top: 60px"
+      type="danger" round
+      @click="logout"
+    >退出登录</van-button>
   </div>
 </template>
 
@@ -182,23 +202,21 @@ export default {
           phone,
           smsCode
         })
+        console.log(result)
         this.$toast(result.msg)
-        if (result.status) {
-          let data = {
-            ...result.data,
-            token: result.token
-          }
-          console.log(data)
-          // 更改成功则更新本地数据并返回
-          this.$store.commit(type.UPDATE_USER, data)
-          // 本地数据更新
-          this.$store.commit(type.SET_USER_BY_PHONE, data.phone)
-          this.$refs.updatePhone.clear()
-          this.changePhoneShow = false
-        }
+        // 更改成功则更新本地数据并返回
+        this.$store.commit(type.UPDATE_USER, result.data)
+        // 本地数据更新,todoList, task
+        this.$store.commit(type.SET_USER_BY_PHONE, result.data.phone)
+        this.$refs.updatePhone.clear()
+        this.changePhoneShow = false
       } catch (e) {
-        console.error(e)
-        this.$toast.fail('系统错误')
+        if (e.data) {
+          this.$toast(e.data.msg)
+        } else {
+          console.error(e)
+          this.$toast.fail('系统错误')
+        }
       } finally {
         this.loading = false
       }
