@@ -122,19 +122,17 @@ export default {
         showIndex: false
       })
     },
-    async upyunCompress () {
+    upyunCompress () {
       let path = this.path
-      let tasks = [{
+      compress([{
         sources: [`${path}/`], // 压缩目录下所有文件
         save_as: `${path}.zip`, // 保存位置
         home_dir: `${path}` // 压缩时不包含的目录
-      }]
-      try {
-        let data = await compress(tasks)
+      }]).then(data => {
         console.log('压缩任务已提交：' + data)
-      } catch (e) {
+      }).catch(e => {
         console.error(e)
-      }
+      })
     },
     // 创建链接开始下载
     createLink () {

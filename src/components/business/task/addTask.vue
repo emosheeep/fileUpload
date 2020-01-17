@@ -171,23 +171,27 @@ export default {
         userList: list
       }
     },
-    async addRecord () {
+    addRecord () {
       if (!this.checkState()) {
         return
       }
       let task = this.createTask()
-      // 发起请求
-      try {
-        this.loading = true // 开始加载
-        let result = await addTask({ task: task })
+      this.loading = true // 开始加载
+      addTask({
+        task
+      }).then(result => {
         if (result.status) {
           this.$store.commit(type.ADD_TASK, task)
           this.$toast.success('成功')
           this.goBack()
-        } else this.$toast.fail('发布失败')
-      } catch (e) {
+        } else {
+          this.$toast.fail('发布失败')
+        }
+      }).catch(e => {
         this.$toast.fail('发布失败')
-      } finally { this.loading = false }
+      }).finally(() => {
+        this.loading = false
+      })
     },
     toggle (index) {
       this.$refs.checkboxes[index].toggle()

@@ -49,7 +49,7 @@ export default {
         return false
       } else return true
     },
-    async login () {
+    login () {
       if (!this.checkState()) {
         return this.$toast('请填写正确信息')
       }

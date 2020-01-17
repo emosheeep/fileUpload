@@ -80,7 +80,6 @@ export default {
     // 选择学校
     chooseSchool (event) {
       let name = event.target.innerText
-      console.log(name)
       if (!name || name === this.finishedText) {
         return
       }
@@ -92,22 +91,22 @@ export default {
       this.$emit('update:show', false)
     },
     // 获取大学信息
-    async getUniInfo () {
+    getUniInfo () {
       let storage = window.sessionStorage
       let schools = JSON.parse(storage.getItem('schools'))
-      if (!schools) {
-        // 本地缓存不存在则请求数据
-        try {
-          let result = await getUniversity()
-          schools = result
+      if (schools) {
+        this.schools = schools
+        this.uniName = Object.keys(schools)
+      } else {
+        // 本地没有学校信息就请求远程
+        getUniversity().then(result => {
+          this.schools = result
+          this.uniName = Object.keys(result)
           storage.setItem('schools', JSON.stringify(result))
-        } catch (e) {
+        }).catch(e => {
           console.error('大学信息获取失败')
-          return
-        }
+        })
       }
-      this.schools = schools
-      this.uniName = Object.keys(schools)
     }
   },
   mounted () {

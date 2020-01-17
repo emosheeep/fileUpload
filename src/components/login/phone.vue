@@ -50,7 +50,7 @@ export default {
         this.telErrMsg = ''
       }
     },
-    async sendCode () {
+    sendCode () {
       if (this.phone.length !== 11) {
         return this.$toast('请输入正确的手机号')
       } else if (this.phoneDefault === this.phone) {
@@ -59,15 +59,15 @@ export default {
         return this.$toast('请稍后再试')
       }
       this.delay(60) // 60s倒计时，并用cookie限制60s内不能发送相同手机号的验证码
-      try {
-        // 发送验证码
-        let data = await sendAuthCode({ phone: this.phone })
+      sendAuthCode({
+        phone: this.phone
+      }).then(data => {
         this.$toast(data.msg)
         console.log(data)
-      } catch (e) {
+      }).catch(e => {
         console.error(e)
         this.$toast.fail('系统错误')
-      }
+      })
     },
     // 按钮倒计时
     delay (time) {

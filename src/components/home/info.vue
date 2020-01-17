@@ -163,26 +163,23 @@ export default {
           message: '确认修改吗？'
         })
       } catch (e) { return }
-      try {
-        this.loading = true
-        // 更新请求
-        let result = await updateInfo({
-          phone: this.phone,
-          data: userInfo
-        })
+      this.loading = true
+      updateInfo({
+        phone: this.phone,
+        data: userInfo
+      }).then(result => {
         this.$toast(result.msg)
         if (result.status) {
           // result 为修改成功后的用户数据
           this.$store.commit(type.UPDATE_USER, result.data)
           this.updateShow = false
         }
-        console.log(result)
-      } catch (e) {
+      }).catch(e => {
         console.error(e)
         this.$toast.fail('系统错误')
-      } finally {
+      }).finally(() => {
         this.loading = false
-      }
+      })
     },
     // 更换手机号码
     async updatePhone (data) {
@@ -199,14 +196,12 @@ export default {
           message: '确认修改吗？'
         })
       } catch (e) { return }
-      try {
-        this.loading = true
-        let result = await updatePhone({
-          origin: this.phone,
-          phone,
-          smsCode
-        })
-        console.log(result)
+      this.loading = true
+      updatePhone({
+        origin: this.phone,
+        phone,
+        smsCode
+      }).then(result => {
         this.$toast(result.msg)
         // 更改成功则更新本地数据并返回
         this.$store.commit(type.UPDATE_USER, result.data)
@@ -214,16 +209,16 @@ export default {
         this.$store.commit(type.SET_USER_BY_PHONE, result.data.phone)
         this.$refs.updatePhone.clear()
         this.changePhoneShow = false
-      } catch (e) {
+      }).catch(e => {
         if (e.data) {
           this.$toast(e.data.msg)
         } else {
           console.error(e)
           this.$toast.fail('系统错误')
         }
-      } finally {
+      }).finally(() => {
         this.loading = false
-      }
+      })
     }
   }
 }

@@ -19,7 +19,7 @@ export default {
     })
   },
   // 异步更新联系人信息
-  async [type.SET_CONTACT] ({ commit, state }, payload) {
+  [type.SET_CONTACT] ({ commit, state }, payload) {
     let { toast, contact } = payload
     toast.loading({
       loadingType: 'spinner',
@@ -27,21 +27,19 @@ export default {
       message: '请稍后',
       forbidClick: true
     })
-    try {
-      let options = {
-        condition: { phone: state.phone },
-        data: { contact }
-      }
-      let result = await updateContact(options)
+    updateContact({
+      condition: { phone: state.phone },
+      data: { contact }
+    }).then(result => {
       if (result.status) {
         // 后台数据整体替换
         commit(type.SET_CONTACT, contact)
       }
-    } catch (e) {
+    }).catch(e => {
       console.error(e)
       toast.fail('同步失败')
-    } finally {
-      toast.clear() // 停止加载
-    }
+    }).finally(() => {
+      toast.clear() // 停止加载}
+    })
   }
 }

@@ -34,8 +34,7 @@
 
 <script>
 import {
-  Sticky, NavBar, PullRefresh, Row,
-  Col, CountDown, Tag, Button, Popup
+  Sticky, NavBar, PullRefresh, Popup
 } from 'vant'
 import type from '../../../store/mutation-types'
 import { mapState } from 'vuex'
@@ -50,7 +49,6 @@ export default {
     Sticky,
     NavBar,
     PullRefresh,
-    Button,
     Popup
   },
   data () {
