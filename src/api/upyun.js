@@ -1,6 +1,6 @@
 import upyun from 'upyun'
 import http from './axios'
-import {Base64} from 'js-base64'
+import { Base64 } from 'js-base64'
 
 function getHeaderSign (bucket, method, path) {
   return http('/sign/upyun', {

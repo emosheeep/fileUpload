@@ -34,18 +34,26 @@
         }">
           <phone submitText="注册" :loading="loading"
                  ref="phone"
-                 @submit="register"></phone>
+                 @submit="register" />
         </slot>
       </van-cell-group>
     </div>
 </template>
 
 <script>
+import { CellGroup, Field, Popup } from 'vant'
 import _ from 'lodash'
-import {register} from '../../api/api'
+import { register } from '../../api/api'
 import SchoolPicker from './schoolPicker'
 export default {
   name: 'register',
+  components: {
+    'van-cell-group': CellGroup,
+    'van-field': Field,
+    'van-popup': Popup,
+    'phone': () => import('./phone'),
+    SchoolPicker
+  },
   data () {
     return {
       loading: false, // 按钮加载状态
@@ -75,7 +83,6 @@ export default {
       }
     }
   },
-  components: { SchoolPicker, 'phone': () => import('./phone') },
   methods: {
     chooseSchool () {
       this.schoolPickerShow = true

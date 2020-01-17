@@ -11,7 +11,7 @@
 #### ①主要工具：
 1. 前端主要使用Vue框架，Vuex状态管理，Vue-Router路由管理，辅以lodash库和ES6新特性进行组件化开发，使用webpack打包项目。
 2. UI方面使用Vue移动端组件库Vant，采用stylus预处理器编译CSS代码，除组件原生样式外暂时未做太多布局，重点开发业务逻辑。
-3. 使用vue-persistedstate、secure-ls两个包进行本地状态持久化与加密存储，防止刷新丢失数据并保证数据安全。
+3. 使用vue-persistedstate进行本地状态持久化存储，自己编写storage.js进行localstorage加密处理，防止刷新丢失数据并保证数据安全。
 4. 使用axios，qs包封装请求，处理请求字符串（**q**uery**s**tring）
 5. 使用js-cookie包管理cookie，读取登陆状态等
 
@@ -68,13 +68,13 @@ npm run build --report
 ```
 
 ### 四、相关截图
-![](README_files/1.jpg)
-![](README_files/2.jpg)
-![](README_files/3.jpg)
-![](README_files/4.jpg)
-![](README_files/5.jpg)
-![](README_files/6.jpg)
-![](README_files/7.jpg)
-![](README_files/8.jpg)
-![](README_files/9.jpg)
-![](README_files/10.jpg)
+![示例](images/1.jpg)
+![示例](images/2.jpg)
+![示例](images/3.jpg)
+![示例](images/4.jpg)
+![示例](images/5.jpg)
+![示例](images/6.jpg)
+![示例](images/7.jpg)
+![示例](images/8.jpg)
+![示例](images/9.jpg)
+![示例](images/10.jpg)

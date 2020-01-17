@@ -1,25 +1,22 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
-import {router} from './router'
-import './assets/reset.css'
+import App from './App.vue'
+import router from './router'
 import store from './store'
-import Vant from 'vant'
-import 'vant/lib/index.css'
+import './assets/reset.css'
 import Cookies from 'js-cookie'
+import {
+  NavBar, Cell, Button,
+  Toast, Dialog, Icon
+} from 'vant'
 
-Vue.use(Vant)
+Vue.use(NavBar).use(Toast).use(Dialog).use(Cell).use(Button)
+  .use(Icon)
 Vue.config.productionTip = false
-
 // 全局绑定cookie函数
 Vue.prototype.$cookie = Cookies
 
-/* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')

@@ -65,15 +65,19 @@
 </template>
 
 <script>
+import { CellGroup, Popup, Divider } from 'vant'
 import _ from 'lodash'
 import type from '../../store/mutation-types'
-import {mapState} from 'vuex'
-import {updateInfo, updatePhone} from '../../api/api'
+import { mapState } from 'vuex'
+import { updateInfo, updatePhone } from '../../api/api'
 export default {
   name: 'info',
   components: {
     Register: () => import('../login/register'),
-    Phone: () => import('../login/phone')
+    Phone: () => import('../login/phone'),
+    'van-cell-group': CellGroup,
+    'van-popup': Popup,
+    'van-divider': Divider
   },
   data () {
     return {
@@ -125,7 +129,7 @@ export default {
             window.localStorage.clear()
             setTimeout(() => {
               done()
-              this.$router.push({name: 'login'})
+              this.$router.push({ name: 'login' })
             }, 400)
           } else {
             done()
@@ -182,7 +186,7 @@ export default {
     },
     // 更换手机号码
     async updatePhone (data) {
-      let {phone, smsCode} = data
+      let { phone, smsCode } = data
       if (phone === '' || smsCode === '') {
         return this.$toast('请填写完整信息')
       } else if (phone === this.phone) {

@@ -78,14 +78,27 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {
+  ActionSheet, Panel, CountDown, Stepper,
+  Tab, Tabs, Tag
+} from 'vant'
+import { mapState } from 'vuex'
 import type from '../../../store/mutation-types'
-import {removeTask, updateTask} from '../../../api/api'
-import {client} from '../../../api/upyun'
+import { removeTask, updateTask } from '../../../api/api'
+import { client } from '../../../api/upyun'
 export default {
   name: 'taskDetail',
   props: {
     title: String
+  },
+  components: {
+    'van-action-sheet': ActionSheet,
+    'van-panel': Panel,
+    'van-count-down': CountDown,
+    'van-stepper': Stepper,
+    'van-tag': Tag,
+    'van-tab': Tab,
+    'van-tabs': Tabs
   },
   data () {
     return {
@@ -96,8 +109,8 @@ export default {
       dayNum: 0, // 延长天数
       active: 0, // 当前项
       actions: [
-        {name: '延长时间', color: 'green'},
-        {name: '结束任务', subname: '不可逆'}
+        { name: '延长时间', color: 'green' },
+        { name: '结束任务', subname: '不可逆' }
       ],
       complete: [] // 已完成人员
     }
@@ -144,7 +157,7 @@ export default {
         duration: 0,
         forbidClick: true
       })
-      updateTask({task: task}).then(result => {
+      updateTask({ task: task }).then(result => {
         if (result.status) {
           this.$store.commit(type.UPDATE_TASK, task)
           this.curTask.deadline = deadline // 更新视图
@@ -158,26 +171,27 @@ export default {
     onDelete () {
       this.$dialog.confirm({
         title: '警告',
-        message: '您确定结束该任务？结束后该任务将被删除',
-        beforeClose: async (action, done) => {
-          if (action !== 'confirm') {
-            return done()
-          }
-          try {
-            let result = await removeTask({task: this.curTask})
-            if (result.status) {
-              // 提交更改，关闭弹框，返回上一级
-              this.$store.commit(type.DELETE_TASK, this.curTask)
-              done()
-              this.$router.go(-1)
-              this.$toast.success('成功')
-            } else this.$toast.fail('删除失败')
-          } catch (e) {
-            this.$toast.fail('删除失败')
-            console.error(e)
-          }
-        }
-      }).catch(e => e)
+        message: '您确定结束该任务？结束后该任务将被删除'
+      }).then(() => {
+        this.$toast.loading({
+          message: '请稍后...',
+          forbidClick: true,
+          loadingType: 'spinner',
+          duration: 0
+        })
+        // 返回promise替代
+        return removeTask({ task: this.curTask })
+      }).then(result => {
+        if (result.status) {
+          // 提交更改，关闭弹框，返回上一级
+          this.$store.commit(type.DELETE_TASK, this.curTask)
+          this.$router.go(-1)
+          this.$toast.success('成功')
+        } else this.$toast.fail('删除失败')
+      }).catch(e => {
+        this.$toast.fail('删除失败')
+        console.error(e)
+      })
     },
     timeFormat (time) {
       time = new Date(time)

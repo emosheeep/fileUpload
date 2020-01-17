@@ -25,10 +25,14 @@
 </template>
 
 <script>
-import {client, refreshCDN} from '../../../api/upyun'
-import {mapState} from 'vuex'
+import { Uploader } from 'vant'
+import { client, refreshCDN } from '../../../api/upyun'
+import { mapState } from 'vuex'
 export default {
   name: 'upload',
+  components: {
+    'van-uploader': Uploader
+  },
   props: {
     task: Object,
     show: Boolean
@@ -48,7 +52,7 @@ export default {
     // 返回上传路径
     path () {
       let path = `/upload/${this.task.creator}/${this.task.title}`
-      let typeStr = this.fileList[0].content.match(/:(.*?);/)[1]
+      let typeStr = this.fileList[0].content.match(/:(.*?);/)[1] // 通过正则表达式匹配文件类型
       typeStr = typeStr.split('/')[1]
       let filename = `${this.studentID}-${this.username}`
       return `${path}/${filename}.${typeStr}`
@@ -59,7 +63,7 @@ export default {
       if (this.fileList.length === 0) {
         return this.$toast('请选择文件')
       }
-      let {file} = this.fileList[0]
+      let { file } = this.fileList[0]
       console.dir(file)
       // 进入加载状态
       this.loading = true

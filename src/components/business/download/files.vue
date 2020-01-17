@@ -22,9 +22,14 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { Sticky, CellGroup } from 'vant'
+import { mapState } from 'vuex'
 export default {
   name: 'download',
+  components: {
+    'van-sticky': Sticky,
+    'van-cell-group': CellGroup
+  },
   data () {
     return {
       activeName: ''

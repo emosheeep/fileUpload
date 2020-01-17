@@ -1,27 +1,28 @@
 // 带过期时间的持久化加密本地存储
-import SecureLS from 'secure-ls'
+import { Base64 } from 'js-base64'
 
 class Storage {
   constructor () { // 参数为最长过期时间
-    this.storage = new SecureLS()
+    this.storage = window.localStorage
   }
   setItem (key, value) {
     // 这里的value已经是JSON格式
-    this.storage.set(key, value)
+    this.storage.setItem(key, Base64.encode(value))
   }
   getItem (key) {
-    let data = JSON.parse(this.storage.get(key))
-    console.log('到期时间：', new Date(data.expires).toLocaleDateString(), new Date(data.expires).toLocaleTimeString())
-    if (Date.now() <= data.expires) {
-      return this.storage.get(key)
+    let origin = Base64.decode(this.storage.getItem(key))
+    let { expires } = JSON.parse((origin))
+    console.log('到期时间：', new Date(expires).toLocaleDateString(), new Date(expires).toLocaleTimeString())
+    if (Date.now() <= expires) {
+      return origin // 这里要返回JSON格式字符串
     } else {
       // 时间过期就清空
       this.removeItem(key)
-      return {}
+      return ''
     }
   }
   removeItem (key) {
-    this.storage.remove(key)
+    this.storage.removeItem(key)
   }
 }
 

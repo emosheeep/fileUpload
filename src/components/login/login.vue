@@ -20,10 +20,14 @@
 </template>
 
 <script>
-import {login} from '../../api/api'
+import { Field } from 'vant'
+import { login } from '../../api/api'
 import type from '../../store/mutation-types'
 export default {
   name: 'login',
+  components: {
+    'van-field': Field
+  },
   data () {
     return {
       phone: '',
@@ -56,7 +60,7 @@ export default {
       }).then(result => {
         result.msg && this.$toast(result.msg)
         this.$store.commit(type.UPDATE_USER, result.user)
-        this.$router.push({name: 'home'}, () => {
+        this.$router.push({ name: 'home' }, () => {
           console.log('登陆成功')
         }, e => e) // 跳转到主页
       }).catch(e => {

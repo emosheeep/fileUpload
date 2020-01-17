@@ -70,12 +70,24 @@
 </template>
 
 <script>
+import {
+  CellGroup, Field, Checkbox,
+  CheckboxGroup, DatetimePicker, Popup
+} from 'vant'
 import _ from 'lodash'
-import {mapState} from 'vuex'
-import {addTask} from '../../../api/api'
+import { mapState } from 'vuex'
+import { addTask } from '../../../api/api'
 import type from '../../../store/mutation-types'
 export default {
   name: 'addTask',
+  components: {
+    'van-cell-group': CellGroup,
+    'van-field': Field,
+    'van-checkbox': Checkbox,
+    'van-checkbox-group': CheckboxGroup,
+    'van-datetime-picker': DatetimePicker,
+    'van-popup': Popup
+  },
   data () {
     return {
       loading: false, // 按钮状态
@@ -147,7 +159,7 @@ export default {
         }
         return result
       }, [])
-      list = _.uniqBy(list, 'studentID') // 按照学号去重
+      list = _.uniqWith(list, _.isEqual) // 按照学号去重
       return {
         id: String(Date.now()),
         creator: this.$store.state.phone,
@@ -167,7 +179,7 @@ export default {
       // 发起请求
       try {
         this.loading = true // 开始加载
-        let result = await addTask({task: task})
+        let result = await addTask({ task: task })
         if (result.status) {
           this.$store.commit(type.ADD_TASK, task)
           this.$toast.success('成功')

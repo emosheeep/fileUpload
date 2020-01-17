@@ -1,14 +1,14 @@
 <template>
   <div>
-    <van-sticky>
-      <van-nav-bar
+    <Sticky>
+      <NavBar
         title="待提交"
         left-arrow
         @click-left="$router.push({name: 'home'})">
-      </van-nav-bar>
-    </van-sticky>
+      </NavBar>
+    </Sticky>
     <!--      待提交清单-->
-    <van-pull-refresh
+    <PullRefresh
       v-model="freshLoading"
       @refresh="onRefresh"
       style="overflow: visible"
@@ -20,27 +20,39 @@
                    @click.native="showDetail(item)"
         />
       </div>
-    </van-pull-refresh>
+    </PullRefresh>
     <!--      详情页面-->
-    <van-popup
+    <Popup
       v-model="detailShow"
       :lazy-render="true"
       position="bottom"
     >
       <upload :task="curTask" :show.sync="detailShow"/>
-    </van-popup>
+    </Popup>
   </div>
 </template>
 
 <script>
+import {
+  Sticky, NavBar, PullRefresh, Row,
+  Col, CountDown, Tag, Button, Popup
+} from 'vant'
 import type from '../../../store/mutation-types'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 import TaskItem from '../task/taskItem'
-import {todoList} from '../../../api/api'
+import { todoList } from '../../../api/api'
 import Upload from './upload'
 export default {
   name: 'myTask',
-  components: {Upload, TaskItem},
+  components: {
+    Upload,
+    TaskItem,
+    Sticky,
+    NavBar,
+    PullRefresh,
+    Button,
+    Popup
+  },
   data () {
     return {
       detailShow: false,

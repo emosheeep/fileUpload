@@ -26,14 +26,16 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { Sticky, PullRefresh } from 'vant'
+import { mapState } from 'vuex'
 import type from '../../../store/mutation-types'
-import {throttle} from 'lodash'
+import { throttle } from 'lodash'
 export default {
-  name: 'myTask',
+  name: 'taskList',
   components: {
-    TaskDetail: () => import('./taskDetail'),
-    TaskItem: () => import('./taskItem')
+    TaskItem: () => import('./taskItem'),
+    'van-sticky': Sticky,
+    'van-pull-refresh': PullRefresh
   },
   data () {
     return {
@@ -46,7 +48,7 @@ export default {
   }),
   methods: {
     showTaskDetail (title) {
-      this.$router.push({name: 'detail', query: { title }})
+      this.$router.push({ name: 'detail', query: { title } })
     },
     // 刷新列表数据
     onRefresh () {

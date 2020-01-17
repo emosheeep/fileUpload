@@ -20,10 +20,13 @@
 </template>
 
 <script>
-import {sendAuthCode} from '../../api/api'
-
+import { Field } from 'vant'
+import { sendAuthCode } from '../../api/api'
 export default {
   name: 'phone',
+  components: {
+    'van-field': Field
+  },
   props: {
     submitText: String,
     loading: Boolean // 控制按钮加载状态
@@ -58,7 +61,7 @@ export default {
       this.delay(60) // 60s倒计时，并用cookie限制60s内不能发送相同手机号的验证码
       try {
         // 发送验证码
-        let data = await sendAuthCode({phone: this.phone})
+        let data = await sendAuthCode({ phone: this.phone })
         this.$toast(data.msg)
         console.log(data)
       } catch (e) {

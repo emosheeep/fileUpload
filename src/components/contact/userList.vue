@@ -15,8 +15,12 @@
 </template>
 
 <script>
+import { SwipeCell } from 'vant'
 export default {
   name: 'userList',
+  components: {
+    'van-swipe-cell': SwipeCell
+  },
   props: {
     list: Array // 对象数组
   },

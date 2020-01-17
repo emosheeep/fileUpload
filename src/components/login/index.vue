@@ -13,18 +13,21 @@
 
 <script>
 import login from './login'
+import { Tab, Tabs } from 'vant'
 export default {
   name: 'index',
+  components: {
+    login,
+    'register': () => import('./register'),
+    'phone': import('./phone'),
+    'van-tabs': Tabs,
+    'van-tab': Tab
+  },
   data () {
     return {
       active: 0,
       container: ['login', 'register']
     }
-  },
-  components: {
-    login,
-    'register': () => import('./register'),
-    'phone': import('./phone')
   }
 }
 </script>

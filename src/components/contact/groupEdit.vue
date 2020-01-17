@@ -16,9 +16,13 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { Field } from 'vant'
+import { mapState } from 'vuex'
 export default {
   name: 'groupEdit',
+  components: {
+    'van-field': Field
+  },
   props: {
     group: Object,
     type: String // 编辑模式或新增

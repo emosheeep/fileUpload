@@ -21,24 +21,24 @@
         </div>
       </div>
 <!--      业务模块-->
-      <van-grid :column-num="3" clickable style="margin-top: 30px">
-        <van-grid-item icon="todo-list-o" text="待提交" to="/todoList"/>
-        <van-grid-item icon="records" text="发布任务" to="/task/list"/>
-        <van-grid-item icon="down" text="文件下载" to="/files"/>
-        <van-grid-item icon="contact" text="常用联系人" to="/contact/groups"/>
-      </van-grid>
+      <Grid :column-num="3" clickable style="margin-top: 30px">
+        <GridItem icon="todo-list-o" text="待提交" to="/todoList"/>
+        <GridItem icon="records" text="发布任务" to="/task/list"/>
+        <GridItem icon="down" text="文件下载" to="/files"/>
+        <GridItem icon="contact" text="常用联系人" to="/contact/groups"/>
+      </Grid>
     </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
-import GroupList from '../contact/groupItem'
-import GroupEdit from '../contact/groupEdit'
+import { Image, Grid, GridItem } from 'vant'
+import { mapState } from 'vuex'
 export default {
   name: 'home',
   components: {
-    GroupEdit,
-    GroupList
+    'van-image': Image,
+    Grid,
+    GridItem
   },
   computed: mapState({
     username: 'username',

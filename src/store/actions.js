@@ -8,7 +8,7 @@ import type from './mutation-types'
 
 export default {
   // 读取待提交清单信息
-  [type.SET_TASK] ({commit, state}, callback) {
+  [type.SET_TASK] ({ commit, state }, callback) {
     findTask({
       creator: state.phone
     }).then(res => {
@@ -19,8 +19,8 @@ export default {
     })
   },
   // 异步更新联系人信息
-  async [type.SET_CONTACT] ({commit, state}, payload) {
-    let {toast, contact} = payload
+  async [type.SET_CONTACT] ({ commit, state }, payload) {
+    let { toast, contact } = payload
     toast.loading({
       loadingType: 'spinner',
       duration: 0,

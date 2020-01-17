@@ -49,12 +49,23 @@
 
 <script>
 import Vue from 'vue'
-import {ImagePreview, Lazyload} from 'vant'
-import {client, compress} from '../../../api/upyun'
-import {mapState} from 'vuex'
+import {
+  ImagePreview, Lazyload, Sticky, Image,
+  PullRefresh, GridItem, Grid, Loading
+} from 'vant'
+import { client, compress } from '../../../api/upyun'
+import { mapState } from 'vuex'
 Vue.use(Lazyload)
 export default {
   name: 'preview',
+  components: {
+    'van-sticky': Sticky,
+    'van-image': Image,
+    'van-pull-refresh': PullRefresh,
+    'van-grid-item': GridItem,
+    'van-grid': Grid,
+    'van-loading': Loading
+  },
   props: {
     title: String
   },

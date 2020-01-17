@@ -12,7 +12,7 @@ axios.defaults.baseURL = 'http://localhost:3001/api'
 // axios.defaults.baseURL = 'http://www.biubiubius.com:3001/api'
 
 export default function (url, data = {}, type = 'GET',
-  headers = {authorization: store.state.token}) {
+  headers = { authorization: store.state.token }) {
   return new Promise((resolve, reject) => {
     // 保存由axios返回的promise对象
     let promise

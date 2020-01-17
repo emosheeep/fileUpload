@@ -13,13 +13,11 @@
 </template>
 
 <script>
-import UserList from './userList'
-import UserEdit from './userEdit'
+import { SwipeCell } from 'vant'
 export default {
   name: 'groupList',
   components: {
-    UserEdit,
-    UserList
+    'van-swipe-cell': SwipeCell
   },
   props: {
     list: Array // 小组对象数组

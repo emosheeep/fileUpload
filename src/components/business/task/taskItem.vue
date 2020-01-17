@@ -23,8 +23,15 @@
 </template>
 
 <script>
+import { Tag, Col, Row, CountDown } from 'vant'
 export default {
   name: 'taskItem',
+  components: {
+    'van-row': Row,
+    'van-col': Col,
+    'van-count-down': CountDown,
+    'van-tag': Tag
+  },
   props: {
     task: Object
   },
