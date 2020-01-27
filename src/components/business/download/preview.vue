@@ -14,57 +14,32 @@
         @refresh="getFileList"
         style="overflow: visible"
       >
-        <div style="height: 500px">
-          <van-grid :column-num="3">
-            <van-grid-item
-              v-for="(item, index) in images"
-              :key="index"
-              class="image-box"
-            >
-              <van-image
-                width="6rem"
-                height="6rem"
-                fit="cover"
-                lazy-load
-                v-lazy="item.src"
-                :src="item.src"
-                @click="preview(item.src)"
-              >
-                <template v-slot:loading>
-                  <van-loading type="spinner" size="20" />
-                </template>
-                <template v-slot:error>加载失败</template>
-              </van-image>
-              <div class="info">
-                <div class="van-ellipsis">{{item.username}}</div>
-                <div class="van-ellipsis">{{item.studentID}}</div>
-                <div class="van-ellipsis">{{new Date(item.time).toLocaleDateString()}}</div>
-              </div>
-            </van-grid-item>
-          </van-grid>
+        <div class="cards animated fadeInLeft">
+          <card
+            v-for="(item, index) in images"
+            :key="index"
+            :img="item"
+          />
         </div>
       </van-pull-refresh>
     </div>
 </template>
 
 <script>
-import Vue from 'vue'
 import {
-  ImagePreview, Lazyload, Sticky, Image,
-  PullRefresh, GridItem, Grid, Loading
+  Sticky,
+  PullRefresh
 } from 'vant'
 import { client, compress } from '../../../api/upyun'
 import { mapState } from 'vuex'
-Vue.use(Lazyload)
+import Card from './card'
+
 export default {
   name: 'preview',
   components: {
+    Card,
     'van-sticky': Sticky,
-    'van-image': Image,
-    'van-pull-refresh': PullRefresh,
-    'van-grid-item': GridItem,
-    'van-grid': Grid,
-    'van-loading': Loading
+    'van-pull-refresh': PullRefresh
   },
   props: {
     title: String
@@ -116,12 +91,6 @@ export default {
         }
       })
     },
-    preview (src) {
-      ImagePreview({
-        images: [src],
-        showIndex: false
-      })
-    },
     upyunCompress () {
       let path = this.path
       compress([{
@@ -164,6 +133,11 @@ export default {
     this.getFileList() // 获取文件列表
     this.upyunCompress() // 压缩对应文件夹
   },
+  mounted () {
+    const width = window.innerWidth
+    // const cards = document.querySelector('.cards')
+    console.log(width)
+  },
   destroyed () {
     client.deleteFile(`${this.path}.zip`).then(res => {
       console.log('删除状态：', res)
@@ -175,8 +149,8 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.image-box
-  width 33.33%
-.info
-  text-align left
+.cards
+  display flex
+  flex-wrap wrap
+  justify-content space-around
 </style>

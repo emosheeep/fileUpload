@@ -18,12 +18,12 @@ const routes = [
       {
         path: 'explore',
         name: 'explore',
-        component: () => import('../components/home/explore')
+        component: () => import('../components/home/explore.vue')
       },
       {
         path: 'home',
         name: 'home',
-        component: () => import('../components/home/home')
+        component: () => import('../components/home/home.vue')
       }
     ]
   },
@@ -35,7 +35,7 @@ const routes = [
   {
     path: '/info',
     name: 'info',
-    component: () => import('../components/home/info')
+    component: () => import('../components/home/info.vue')
   },
   {
     path: '/task',
@@ -52,17 +52,17 @@ const routes = [
       {
         path: 'list',
         name: 'list',
-        component: () => import('../components/business/task/taskList')
+        component: () => import('../components/business/task/taskList.vue')
       },
       {
         path: 'addTask',
         name: 'addTask',
-        component: () => import('../components/business/task/addTask')
+        component: () => import('../components/business/task/addTask.vue')
       },
       {
         path: 'detail',
         name: 'detail',
-        component: () => import('../components/business/task/taskDetail'),
+        component: () => import('../components/business/task/taskDetail.vue'),
         props: route => ({ title: route.query.title })
       }
     ]
@@ -82,12 +82,12 @@ const routes = [
       {
         path: 'groups',
         name: 'groups',
-        component: () => import('../components/contact/groupList')
+        component: () => import('../components/contact/groupList.vue')
       },
       {
         path: 'members',
         name: 'members',
-        component: () => import('../components/contact/groupUserList'),
+        component: () => import('../components/contact/groupUserList.vue'),
         props: route => ({ title: route.query.title })
       }
     ]
@@ -95,17 +95,17 @@ const routes = [
   {
     path: '/todoList',
     name: 'todoList',
-    component: () => import('../components/business/todoList/todoList')
+    component: () => import('../components/business/todoList/todoList.vue')
   },
   {
     path: '/files',
     name: 'files',
-    component: () => import('../components/business/download/files')
+    component: () => import('../components/business/download/files.vue')
   },
   {
     path: '/preview',
     name: 'preview',
-    component: () => import('../components/business/download/preview'),
+    component: () => import('../components/business/download/preview.vue'),
     props: route => ({ title: route.query.title })
   }
 ]
