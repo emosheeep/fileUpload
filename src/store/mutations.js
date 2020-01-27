@@ -41,9 +41,14 @@ export default {
   },
   // 删除task
   [type.DELETE_TASK] (state, task) {
-    state.task = state.task.filter(item => {
-      return task.id !== item.id
-    })
+    console.log(task)
+    let position = state.task.findIndex(item => item.id === task.id)
+    // TODO: 解决这里的报错
+    try {
+      state.task.splice(position, 1)
+    } catch (e) {
+      console.log(e)
+    }
   },
   // 更新task
   [type.UPDATE_TASK] (state, task) {

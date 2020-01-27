@@ -159,7 +159,9 @@ export default {
         }
         return result
       }, [])
-      list = _.uniqWith(list, _.isEqual) // 按照学号去重
+      list = _.uniqBy(list, val => {
+        return val.studentID // 按照学号去重
+      })
       return {
         id: String(Date.now()),
         creator: this.$store.state.phone,

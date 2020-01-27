@@ -2,15 +2,20 @@ const LodashPlugin = require('lodash-webpack-plugin')
 
 module.exports = {
   chainWebpack: config => {
-    config.plugin('lodash-webpack-plugin')
-      .use(LodashPlugin)
+    config.plugin('lodash').use(LodashPlugin).end()
+    config.devServer.host('0.0.0.0').port(5000).disableHostCheck(true).end()
+    // 构建分析
     if (process.env.NODE_ENV === 'production') {
-      if (process.env.npm_config_report) {
-        config.plugin('webpack-bundle-analyzer')
-          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-          .end()
-        config.plugins.delete('prefetch')
-      }
+      config.plugin('html').tap(options => {
+        options[0].minify.removeAttributeQuotes = false
+        return options
+      })
+      // if (process.env.npm_config_report) {
+      //   config.plugin('analyzer')
+      //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+      //     .end()
+      //   config.plugins.delete('prefetch')
+      // }
     }
   }
 }

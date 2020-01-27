@@ -10,8 +10,8 @@
       </van-nav-bar>
       <van-action-sheet
         v-model="showAction"
-        :actions="actions"
         cancel-text="取消"
+        :actions="actions"
         :close-on-click-action="true"
         @select="onSelect" />
 <!--      详情-->
@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     ...mapState({
-      task: 'task'
+      task: state => state.task
     }),
     curTask () {
       let curTask = this.task.filter(item => item.title === this.title)

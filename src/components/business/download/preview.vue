@@ -24,9 +24,9 @@
               <van-image
                 width="6rem"
                 height="6rem"
+                fit="cover"
                 lazy-load
                 v-lazy="item.src"
-                fit="scale-down"
                 :src="item.src"
                 @click="preview(item.src)"
               >
