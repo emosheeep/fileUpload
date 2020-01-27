@@ -50,7 +50,7 @@ export default {
 
 <style scoped lang="stylus">
 #card
-  flex-shrink 1
+  /*修改宽度要记得修改占位div的宽度*/
   width 40%
   height 170px
   margin 10px

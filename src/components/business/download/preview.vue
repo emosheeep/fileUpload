@@ -20,6 +20,7 @@
             :key="index"
             :img="item"
           />
+          <div style="width: 40%; margin: 10px" v-if="images.length % 2 !== 0" />
         </div>
       </van-pull-refresh>
     </div>
@@ -133,16 +134,11 @@ export default {
     this.getFileList() // 获取文件列表
     this.upyunCompress() // 压缩对应文件夹
   },
-  mounted () {
-    const width = window.innerWidth
-    // const cards = document.querySelector('.cards')
-    console.log(width)
-  },
   destroyed () {
     client.deleteFile(`${this.path}.zip`).then(res => {
       console.log('删除状态：', res)
     }).catch(e => {
-      console.log(e)
+      console.warn(e)
     })
   }
 }
@@ -153,4 +149,8 @@ export default {
   display flex
   flex-wrap wrap
   justify-content space-around
+  height calc(100vh - 50px)
+  div:after
+    content ""
+    flex auto
 </style>
