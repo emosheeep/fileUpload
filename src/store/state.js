@@ -8,6 +8,7 @@ export default {
   username: '',
   studentID: '',
   phone: '',
+  avatar: '', // 头像路径
   university: {
     name: '',
     id: ''

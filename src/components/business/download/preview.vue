@@ -14,7 +14,7 @@
         @refresh="getFileList"
         style="overflow: visible"
       >
-        <div class="cards animated fadeInLeft">
+        <div class="cards animated fadeInUp">
           <card
             v-for="(item, index) in images"
             :key="index"
@@ -34,7 +34,6 @@ import {
 import { client, compress } from '../../../api/upyun'
 import { mapState } from 'vuex'
 import Card from './card'
-
 export default {
   name: 'preview',
   components: {

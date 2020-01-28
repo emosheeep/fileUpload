@@ -72,5 +72,8 @@ export default {
       item.creator = phone
       return item
     })
+  },
+  [type.SET_AVATAR] (state, avatarPath) {
+    state.avatar = avatarPath
   }
 }

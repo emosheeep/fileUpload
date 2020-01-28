@@ -1,10 +1,10 @@
 <template>
     <div>
       <router-view/>
-      <Tabbar v-model="active">
-        <TabbarItem icon="search" :to="{name: 'explore'}">探索</TabbarItem>
-        <TabbarItem icon="setting-o" :to="{name: 'home'}">主页</TabbarItem>
-      </Tabbar>
+      <van-tabbar v-model="active">
+        <van-tabbar-item icon="search" :to="{name: 'explore'}">探索</van-tabbar-item>
+        <van-tabbar-item icon="home-o" :to="{name: 'home'}">主页</van-tabbar-item>
+      </van-tabbar>
     </div>
 </template>
 
@@ -12,7 +12,10 @@
 import { Tabbar, TabbarItem } from 'vant'
 export default {
   name: 'index',
-  components: { Tabbar, TabbarItem },
+  components: {
+    'van-tabbar': Tabbar,
+    'van-tabbar-item': TabbarItem
+  },
   data () {
     return {
       active: 1

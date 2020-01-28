@@ -15,11 +15,13 @@
         @refresh="onRefresh"
       >
         <div class="task-item-box">
-          <task-item
-            v-for="(item, index) in task" :key="index"
-            :task="item"
-            @click.native="showTaskDetail(item.title)"
-          />
+          <div
+            v-for="(item, index) in task"
+            :key="index"
+            @click.capture="showTaskDetail(item.title)"
+          >
+            <task-item :task="item"/>
+          </div>
         </div>
       </van-pull-refresh>
     </div>
@@ -66,11 +68,7 @@ export default {
 
 <style scoped lang="stylus">
 .task-item-box
-  min-height: 90vh
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
+  display flex
+  flex-direction column
+  height: calc(100vh - 50px)
 </style>

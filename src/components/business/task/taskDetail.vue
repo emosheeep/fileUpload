@@ -2,7 +2,7 @@
     <div>
 <!--      导航栏-->
       <van-nav-bar
-        title="任务详情"
+        :title="curTask.title"
         left-arrow
         @click-left="$router.go(-1)"
         @click-right="showAction = true">
@@ -15,7 +15,7 @@
         :close-on-click-action="true"
         @select="onSelect" />
 <!--      详情-->
-      <van-panel :title="curTask.title" :desc="curTask.content">
+      <van-panel title="任务描述" :desc="curTask.content">
         <div class="time-info">
           <span>开始时间：{{timeFormat(curTask.startTime)}}</span>&nbsp;
           <span>截止时间：{{timeFormat(curTask.deadline)}}</span>

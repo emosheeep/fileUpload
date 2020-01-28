@@ -18,7 +18,7 @@
     <div class="info">
       <div class="van-ellipsis">姓名：{{img.username}}</div>
       <div class="van-ellipsis">学号：{{img.studentID}}</div>
-      <div class="van-ellipsis">提交时间：{{new Date(img.time).toLocaleDateString()}}</div>
+      <div class="van-ellipsis">时间：{{new Date(img.time).toLocaleDateString()}}</div>
     </div>
   </div>
 </template>
@@ -42,7 +42,7 @@ export default {
       })
     },
     bounce (e) {
-      this.$animationCSS(e.currentTarget, 'bounceIn')
+      this.$animationCSS(e.currentTarget, 'shake')
     }
   }
 }
