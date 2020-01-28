@@ -170,14 +170,20 @@ export default {
     },
     changeAvatar (e, filename) {
       this.$animationCSS(e.target, 'bounce', () => {
-        this.$store.commit(type.SET_AVATAR, filename)
         this.avatarPanelShow = false
+        this.$store.dispatch(type.SET_AVATAR, {
+          filename,
+          toast: this.$toast
+        })
       })
     },
     changeBackground (e, filename) {
       this.$animationCSS(e.target, 'bounce', () => {
-        this.$store.commit(type.SET_BACKGROUND, filename)
         this.backgroundPanelShow = false
+        this.$store.dispatch(type.SET_BACKGROUND, {
+          filename,
+          toast: this.$toast
+        })
       })
     }
   },

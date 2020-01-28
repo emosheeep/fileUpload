@@ -74,7 +74,6 @@ export default {
   watch: {
     // 监听user属性，给组件内数据初始化
     user (newVal) {
-      console.log(newVal)
       if (newVal) {
         this.username = newVal.username // 用户姓名
         this.studentID = newVal.studentID// studentID: '', // 学号
@@ -91,7 +90,7 @@ export default {
     // 检查数据完整性，不完整返回false
     checkState () {
       // 利用lodash排除空值
-      let result = _.compact([
+      const result = _.compact([
         this.university.name,
         this.username,
         this.phone,
@@ -116,7 +115,9 @@ export default {
         studentID: this.studentID,
         phone: this.phone,
         university: this.university,
-        smsCode: this.smsCode // 验证码
+        smsCode: this.smsCode, // 验证码
+        avatar: '默认.jpg',
+        background: '花丛.jpg'
       }).then(data => {
         data.msg && this.$toast(data.msg)
         this.$refs.phone.clear() // 清除电话号码

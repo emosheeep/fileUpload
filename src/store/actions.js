@@ -2,7 +2,8 @@
  * 通过mutations间接更新state，这里的方法可以是异步的
  */
 import {
-  findTask, updateContact
+  findTask, updateContact,
+  updateAvatar, updateBackground
 } from '../api/api.js'
 import type from './mutation-types'
 
@@ -20,7 +21,7 @@ export default {
   },
   // 异步更新联系人信息
   [type.SET_CONTACT] ({ commit, state }, payload) {
-    let { toast, contact } = payload
+    const { toast, contact } = payload
     toast.loading({
       loadingType: 'spinner',
       duration: 0,
@@ -35,11 +36,47 @@ export default {
         // 后台数据整体替换
         commit(type.SET_CONTACT, contact)
       }
+      toast.clear() // 停止加载
     }).catch(e => {
-      console.error(e)
       toast.fail('同步失败')
-    }).finally(() => {
-      toast.clear() // 停止加载}
+    })
+  },
+  // 更新头像
+  [type.SET_AVATAR] ({ commit, state }, payload) {
+    const { toast, filename } = payload
+    toast.loading({
+      loadingType: 'spinner',
+      duration: 0,
+      message: '请稍后',
+      forbidClick: true
+    })
+    updateAvatar({
+      phone: state.phone,
+      avatar: filename
+    }).then(res => {
+      commit(type.SET_AVATAR, filename)
+      toast.clear()
+    }).catch(e => {
+      toast.fail('更换失败')
+    })
+  },
+  // 更新背景图片
+  [type.SET_BACKGROUND] ({ commit, state }, payload) {
+    const { toast, filename } = payload
+    toast.loading({
+      loadingType: 'spinner',
+      duration: 0,
+      message: '请稍后',
+      forbidClick: true
+    })
+    updateBackground({
+      phone: state.phone,
+      background: filename
+    }).then(res => {
+      commit(type.SET_BACKGROUND, filename)
+      toast.clear()
+    }).catch(e => {
+      toast.fail('更换失败')
     })
   }
 }
