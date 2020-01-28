@@ -1,12 +1,12 @@
 <template>
     <div>
-<!--      <van-nav-bar title="主页"/>-->
       <!--背景图片-->
       <div class="background">
         <van-image
           cover
           class="background-img"
-          :src="'http://file.biubiubius.com/background/boys.jpg'"
+          :src="background"
+          @click="backgroundPanelShow = true"
         />
       </div>
       <div class="info-panel">
@@ -34,7 +34,7 @@
             size="large"
             label="选择你喜欢的头像吧"
           />
-          <div class="allAvatar">
+          <div class="all-avatar">
             <van-image
               class="avatar-img"
               round
@@ -96,6 +96,28 @@
           />
         </van-cell-group>
       </div>
+      <!--修改背景-->
+      <van-popup
+        style="height: 100%; width: 50%"
+        position="left"
+        v-model="backgroundPanelShow"
+      >
+        <van-cell
+          center
+          title="背景列表"
+          size="large"
+          label="选择一张背景图"
+        />
+        <div class="all-background">
+          <van-image
+            class="avatar-img"
+            v-for="(item, index) in allBackground"
+            :key="index"
+            :src="item.src"
+            @click="changeBackground($event, item.filename)"
+          />
+        </div>
+      </van-popup>
     </div>
 </template>
 
@@ -114,55 +136,74 @@ export default {
   data () {
     return {
       avatarPanelShow: false,
-      allAvatar: []
+      backgroundPanelShow: false,
+      allAvatar: [],
+      allBackground: []
     }
   },
   computed: mapState({
     username: 'username',
     university: 'university',
-    basePath: state => `${state.domain}/avatar`,
-    avatar: state => `${state.domain}/avatar/${state.avatar}`
+    domain: 'domain',
+    avatar: state => `${state.domain}/avatar/${state.avatar}`,
+    background: state => `${state.domain}/background/${state.background}`
   }),
   methods: {
-    getAvatars () {
-      client.listDir('/avatar').then(res => {
-        this.allAvatar = res.files.map(file => {
+    getPictures () {
+      Promise.all([
+        client.listDir('/avatar'),
+        client.listDir('/background')
+      ]).then(([avatars, backgrounds]) => {
+        this.allAvatar = avatars.files.map(file => {
           return {
             filename: file.name,
-            src: `${this.basePath}/${file.name}`
+            src: `${this.domain}/avatar/${file.name}`
           }
         })
-      }).catch(e => e)
+        this.allBackground = backgrounds.files.map(file => {
+          return {
+            filename: file.name,
+            src: `${this.domain}/background/${file.name}`
+          }
+        })
+      })
     },
     changeAvatar (e, filename) {
       this.$animationCSS(e.target, 'bounce', () => {
-        console.log('啊哈哈')
         this.$store.commit(type.SET_AVATAR, filename)
         this.avatarPanelShow = false
+      })
+    },
+    changeBackground (e, filename) {
+      this.$animationCSS(e.target, 'bounce', () => {
+        this.$store.commit(type.SET_BACKGROUND, filename)
+        this.backgroundPanelShow = false
       })
     }
   },
   mounted () {
-    this.getAvatars()
+    this.getPictures()
   }
 }
 </script>
 
 <style scoped lang="stylus">
 .background
-  position absolute
+  position fixed
   top 0
   z-index -10
-  height 300px
   .background-img
     width 100%
-    height 300px
+    height 250px
 .info-panel
   $radius = 100px
   height 100px
   margin-top 150px
-  border-radius 35px 35px 0 0
-  background-color white
+  background linear-gradient(
+    to top,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  )
   .avatar
     position absolute
     z-index 10
@@ -177,7 +218,7 @@ export default {
     padding-bottom 10px
     text-align center
     font-size 20px
-.allAvatar
+.all-avatar
   display flex
   flex-wrap wrap
   justify-content space-around
@@ -187,6 +228,7 @@ export default {
     border 1px lightgrey solid
     box-shadow 0 0 10px lightgrey
 .business
+  height calc(100vh - 250px)
   background-color white
   font-size 20px !important
 </style>

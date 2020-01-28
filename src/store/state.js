@@ -9,6 +9,7 @@ export default {
   studentID: '',
   phone: '',
   avatar: '', // 头像路径
+  background: '', // 背景图片路径
   university: {
     name: '',
     id: ''

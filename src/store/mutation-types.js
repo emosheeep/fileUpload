@@ -13,7 +13,8 @@ let methods = {
   SET_TODOLIST: 'SET_TODOLIST', // 设置待提交清单
   SET_TOKEN: 'SET_TOKEN', // 设置令牌
   SET_USER_BY_PHONE: 'SET_USER_BY_PHONE', // 服务器端更新数据后，本地也需要更新
-  SET_AVATAR: 'SET_AVATAR' // 修改头像
+  SET_AVATAR: 'SET_AVATAR', // 修改头像
+  SET_BACKGROUND: 'SET_BACKGROUND'
 }
 Object.freeze(methods)
 export default methods

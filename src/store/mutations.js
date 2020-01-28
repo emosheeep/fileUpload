@@ -73,7 +73,10 @@ export default {
       return item
     })
   },
-  [type.SET_AVATAR] (state, avatarPath) {
-    state.avatar = avatarPath
+  [type.SET_AVATAR] (state, filename) {
+    state.avatar = filename
+  },
+  [type.SET_BACKGROUND] (state, filename) {
+    state.background = filename
   }
 }
