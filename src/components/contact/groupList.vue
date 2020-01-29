@@ -61,7 +61,7 @@ export default {
       if (this.contact.length === 0) {
         return '点击加号，添加常用联系人组'
       } else {
-        return '点击小组添加成员，右滑查看更多选项'
+        return '点击小组添加成员，左滑查看更多选项'
       }
     }
   },

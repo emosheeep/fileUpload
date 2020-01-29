@@ -41,6 +41,7 @@ import { mapState } from 'vuex'
 import TaskItem from '../task/taskItem'
 import { todoList } from '../../../api/api'
 import Upload from './upload'
+import { throttle } from 'lodash'
 export default {
   name: 'myTask',
   components: {
@@ -87,9 +88,9 @@ export default {
       this.detailShow = true
     }
   },
-  mounted () {
+  mounted: throttle(function () {
     this.onRefresh()
-  }
+  }, 30 * 1000)
 }
 </script>
 

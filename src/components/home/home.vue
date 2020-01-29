@@ -7,7 +7,12 @@
           class="background-img"
           :src="background"
           @click="backgroundPanelShow = true"
-        />
+        >
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+          <template v-slot:error>加载失败</template>
+        </van-image>
       </div>
       <div class="info-panel">
         <!--头像模块-->
@@ -17,9 +22,14 @@
             round
             :src="avatar"
             @click="avatarPanelShow = true"
-          />
+          >
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+            <template v-slot:error>加载失败</template>
+          </van-image>
         </div>
-        <div class="words van-hairline--bottom">
+        <div class="words">
           {{username}}&nbsp;/&nbsp;{{university.name}}
         </div>
         <!--修改头像-->
@@ -42,7 +52,12 @@
               :key="index"
               :src="item.src"
               @click="changeAvatar($event, item.filename)"
-            />
+            >
+              <template v-slot:loading>
+                <van-loading type="spinner" size="20" />
+              </template>
+              <template v-slot:error>加载失败</template>
+            </van-image>
             <!--弹性布局占位用-->
             <div
               v-if="allAvatar.length % 2 !== 0"
@@ -54,7 +69,7 @@
       </div>
       <!--业务模块-->
       <div class="business">
-        <van-cell-group title="上传">
+        <van-cell-group>
           <van-cell
             is-link
             icon="todo-list-o"
@@ -62,8 +77,6 @@
             title="提交截图"
             to="/todoList"
           />
-        </van-cell-group>
-        <van-cell-group title="下载">
           <van-cell
             is-link
             icon="plus"
@@ -115,14 +128,19 @@
             :key="index"
             :src="item.src"
             @click="changeBackground($event, item.filename)"
-          />
+          >
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+            <template v-slot:error>加载失败</template>
+          </van-image>
         </div>
       </van-popup>
     </div>
 </template>
 
 <script>
-import { Image, CellGroup, Popup } from 'vant'
+import { Image, CellGroup, Popup, Loading } from 'vant'
 import { mapState } from 'vuex'
 import { client } from '../../api/upyun.js'
 import type from '../../store/mutation-types.js'
@@ -131,7 +149,8 @@ export default {
   components: {
     'van-image': Image,
     'van-popup': Popup,
-    'van-cell-group': CellGroup
+    'van-cell-group': CellGroup,
+    'van-loading': Loading
   },
   data () {
     return {
@@ -235,6 +254,7 @@ export default {
     box-shadow 0 0 10px lightgrey
 .business
   height calc(100vh - 250px)
+  padding-top 20px
   background-color white
   font-size 20px !important
 </style>
