@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { Row, CountDown, NoticeBar } from 'vant'
 export default {
   name: 'taskItem',
@@ -44,11 +45,8 @@ export default {
     },
     time () {
       // 返回剩余时间
-      return new Date(this.task.deadline).getTime() - Date.now()
-    },
-    status () {
-      // 显示完成状态
-      return this.curTask.userList.filter(item => item.status === true)
+      const timeStamp = moment(this.task.deadline).subtract(Date.now()).format('x')
+      return Number(timeStamp)
     }
   }
 }

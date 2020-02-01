@@ -21,8 +21,8 @@ export default {
   },
   // 异步更新联系人信息
   [type.SET_CONTACT] ({ commit, state }, payload) {
-    const { toast, contact } = payload
-    toast.loading({
+    const { vm, contact } = payload
+    vm.$toast.loading({
       loadingType: 'spinner',
       duration: 0,
       message: '请稍后',
@@ -36,9 +36,9 @@ export default {
         // 后台数据整体替换
         commit(type.SET_CONTACT, contact)
       }
-      toast.clear() // 停止加载
+      vm.$toast.clear() // 停止加载
     }).catch(e => {
-      toast.fail('同步失败')
+      vm.$toast.fail('同步失败')
     })
   },
   // 更新头像

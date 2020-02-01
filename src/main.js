@@ -2,16 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './plugins/vant.js'
 import './assets/reset.css'
 import 'animate.css'
 import Cookies from 'js-cookie'
-import {
-  NavBar, Cell, Button,
-  Toast, Dialog, Icon, Lazyload
-} from 'vant'
-
-Vue.use(NavBar).use(Toast).use(Dialog).use(Cell).use(Button)
-  .use(Icon).use(Lazyload)
 
 Vue.config.productionTip = false
 // 全局绑定cookie函数

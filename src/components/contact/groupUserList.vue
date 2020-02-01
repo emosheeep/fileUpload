@@ -88,8 +88,8 @@ export default {
     },
     // 保存联系人
     onSave (user) {
-      this.showUserEdit = false
       let list = [] // 存放修改过,或新增的用户列表
+      this.showUserEdit = false
       if (this.type === 'edit') {
         list = this.userList.map(item => item.id === user.id ? user : item)
       } else {
@@ -100,15 +100,15 @@ export default {
     },
     // 删除联系人
     onDelete (user) {
-      this.showUserEdit = false
       // list为删减后的列表
-      let list = this.userList.filter(item => item.id !== user.id)
+      const list = this.userList.filter(item => item.id !== user.id)
+      this.showUserEdit = false
       this.saveToState(list)
     },
     // 将改变后的该分组信息映射到vuex中
     saveToState (list) {
       // 构建小组信息
-      let group = {
+      const group = {
         id: this.group.id,
         name: this.group.name,
         userList: list
@@ -118,7 +118,7 @@ export default {
       contact = contact.map(item => item.id === group.id ? group : item)
       this.$store.dispatch(type.SET_CONTACT, {
         contact,
-        toast: this.$toast
+        vm: this
       })
     }
   }

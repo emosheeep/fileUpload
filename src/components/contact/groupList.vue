@@ -100,8 +100,7 @@ export default {
         message: '确定删除？'
       }).then(() => {
         this.showGroupEdit = false
-        let contact = this.contact.filter(item => item.id !== group.id)
-        console.log(contact)
+        const contact = this.contact.filter(item => item.id !== group.id)
         this.saveToState(contact)
       }).catch(e => e)
     },
@@ -110,7 +109,7 @@ export default {
       // 先更新服务器数据,再更新本地
       this.$store.dispatch(mutationTypes.SET_CONTACT, {
         contact,
-        toast: this.$toast
+        vm: this
       })
     }
   }

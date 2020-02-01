@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { Field } from 'vant'
 import { sendAuthCode } from '../../api/api'
 export default {
@@ -73,7 +74,7 @@ export default {
     delay (time) {
       // 利用cookie限制用户短信验证码的频率
       this.$cookie.set('curPhone', this.phone, {
-        expires: new Date(new Date().getTime() + 1000 * time)
+        expires: moment().add(time, 's').valueOf()
       })
       this.isBanned = true
       this.btnText = `${time}秒后重发`

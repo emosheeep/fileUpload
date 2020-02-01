@@ -20,8 +20,12 @@ export default {
     state.username = ''
     state.studentID = ''
     state.phone = ''
-    state.university.name = ''
-    state.university.id = ''
+    state.avatar = '' // 头像路径
+    state.background = '' // 背景图片路径
+    state.university = {
+      name: '',
+      id: ''
+    }
     state.contact = []
     state.task = []
     state.todoList = []
@@ -41,14 +45,8 @@ export default {
   },
   // 删除task
   [type.DELETE_TASK] (state, task) {
-    console.log(task)
-    let position = state.task.findIndex(item => item.id === task.id)
-    // TODO: 解决这里的报错
-    try {
-      state.task.splice(position, 1)
-    } catch (e) {
-      console.log(e)
-    }
+    // TODO：这里无端报错
+    state.task = state.task.filter(item => item.id !== task.id)
   },
   // 更新task
   [type.UPDATE_TASK] (state, task) {

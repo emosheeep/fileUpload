@@ -78,14 +78,15 @@
 </template>
 
 <script>
-import {
-  ActionSheet, Panel, CountDown, Stepper,
-  Tab, Tabs, Tag
-} from 'vant'
 import { mapState } from 'vuex'
 import type from '../../../store/mutation-types'
 import { removeTask, updateTask } from '../../../api/api'
 import { client } from '../../../api/upyun'
+import moment from 'moment'
+import {
+  ActionSheet, Panel, CountDown, Stepper,
+  Tab, Tabs, Tag
+} from 'vant'
 export default {
   name: 'taskDetail',
   props: {
@@ -125,7 +126,8 @@ export default {
     },
     time () {
       // 返回剩余时间
-      return new Date(this.curTask.deadline).getTime() - Date.now()
+      const tempStamp = moment(this.curTask.deadline).subtract(Date.now()).format('x')
+      return Number(tempStamp)
     },
     // 筛选未完成的人
     filter () {
@@ -147,8 +149,7 @@ export default {
       }
     },
     addTime () {
-      let timeStamp = new Date(this.curTask.deadline).getTime() + this.dayNum * 24 * 3600 * 1000
-      let deadline = new Date(timeStamp) // 新的截止日期
+      let deadline = moment(this.curTask.deadline).add(this.dayNum, 'day').valueOf()
       let task = JSON.parse(JSON.stringify(this.curTask))
       task.deadline = deadline
       // 开始请求

@@ -1,5 +1,6 @@
 // 带过期时间的持久化加密本地存储
 import { Base64 } from 'js-base64'
+import moment from 'moment'
 
 class Storage {
   constructor () { // 参数为最长过期时间
@@ -10,10 +11,11 @@ class Storage {
     this.storage.setItem(key, Base64.encode(value))
   }
   getItem (key) {
-    let origin = Base64.decode(this.storage.getItem(key))
-    let { expires } = JSON.parse((origin))
-    console.log('到期时间：', new Date(expires).toLocaleDateString(), new Date(expires).toLocaleTimeString())
-    if (Date.now() <= expires) {
+    const origin = Base64.decode(this.storage.getItem(key))
+    let { expires } = JSON.parse(origin)
+    expires = moment(expires)
+    console.log('到期时间：', expires.format('YYYY-MM-DD HH:mm:ss'))
+    if (moment().isSameOrBefore(expires)) {
       return origin // 这里要返回JSON格式字符串
     } else {
       // 时间过期就清空

@@ -5,31 +5,36 @@
       left-arrow
       @click-left="goBack" />
     <van-cell-group title="填写信息">
-      <van-field v-model="title"
-                 label="标题" required
-                 placeholder="请输入标题"
-                 show-word-limit
-                 maxlength="15"
+      <van-field
+        v-model="title"
+        label="标题" required
+        placeholder="请输入标题"
+        show-word-limit
+        maxlength="15"
       />
-      <van-field v-model="content"
-                 rows="2"
-                 autosize
-                 label="描述"
-                 type="textarea"
-                 placeholder="简要描述任务要求"
-                 show-word-limit
-                 maxlength="60"
+      <van-field
+        v-model="content"
+        rows="2"
+        autosize
+        label="描述"
+        type="textarea"
+        placeholder="简要描述任务要求"
+        show-word-limit
+        maxlength="60"
       />
-      <van-field readonly
-                 clickable
-                 label="截止日期"
-                 v-model="computedTime"
-                 placeholder="选择截止日期"
-                 @click="timePickerShow = true"
+      <van-field
+        readonly
+        clickable
+        label="截止日期"
+        v-model="computedTime"
+        placeholder="选择截止日期"
+        @click="timePickerShow = true"
       />
-      <van-popup v-model="timePickerShow"
-                 position="bottom"
-                 :style="{ height: '40%' }">
+      <van-popup
+        v-model="timePickerShow"
+        position="bottom"
+        :style="{ height: '40%' }"
+      >
         <van-datetime-picker
           @cancel="timePickerShow = false"
           @confirm="timePickerShow = false"
@@ -41,8 +46,11 @@
       </van-popup>
     </van-cell-group>
     <van-checkbox-group v-model="userList">
-      <van-cell-group  title="选择提交人" :border="false"
-                       style="height: 180px; overflow: auto">
+      <van-cell-group
+        title="选择提交人"
+        :border="false"
+        style="height: 180px; overflow: auto"
+      >
         <van-cell
           v-for="(item, index) in contact"
           clickable
@@ -51,21 +59,28 @@
           :value="`${item.userList.length}人`"
           @click="toggle(index)"
         >
-          <van-checkbox :name="item" slot="right-icon"
-                        ref="checkboxes"
-                        style="margin-left: 10px"/>
+          <van-checkbox
+            :name="item"
+            slot="right-icon"
+            ref="checkboxes"
+            style="margin-left: 10px"
+          />
         </van-cell>
-        <van-cell v-if="contact.length === 0"
-                  title="请先编辑常用联系人组！"
-                  style="text-align: center; color: red; font-size: 18px"/>
+        <van-cell
+          v-if="contact.length === 0"
+          title="请先编辑常用联系人组！"
+          style="text-align: center; color: red; font-size: 18px"
+        />
       </van-cell-group>
     </van-checkbox-group>
-    <van-button round
-                size="large"
-                type="info"
-                :loading="loading"
-                style="position: fixed; bottom: 2%"
-                @click="addRecord">发布任务</van-button>
+    <van-button
+      round
+      size="large"
+      type="info"
+      :loading="loading"
+      style="position: fixed; bottom: 2%"
+      @click="addRecord"
+    >发布任务</van-button>
   </div>
 </template>
 
@@ -75,6 +90,7 @@ import {
   CheckboxGroup, DatetimePicker, Popup
 } from 'vant'
 import _ from 'lodash'
+import moment from 'moment'
 import { mapState } from 'vuex'
 import { addTask } from '../../../api/api'
 import type from '../../../store/mutation-types'
@@ -94,7 +110,7 @@ export default {
       // 时间选择器
       timePickerShow: false,
       minDate: new Date(), // 截止时间默认一天后
-      maxDate: new Date(Date.now() + 24 * 3600 * 1000 * 31), // 最长一个月
+      maxDate: moment().add(1, 'M').valueOf(), // 最长一个月
       tempTime: new Date(), // 截止时间默认一天后
       // 组件数据
       timeChange: false, // 标识时间变化，确认用户是否选择了日期
@@ -106,10 +122,7 @@ export default {
   },
   computed: {
     computedTime () {
-      let year = this.tempTime.getFullYear()
-      let month = String(this.tempTime.getMonth() + 1).padStart(2, '0')
-      let day = String(this.tempTime.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
+      return moment(this.tempTime).format('YYYY-MM-DD')
     },
     ...mapState({
       contact: 'contact',
@@ -117,21 +130,7 @@ export default {
       task: 'task'
     })
   },
-  watch: {
-    tempTime: {
-      handler (newVal) {
-        let time = this.getDayTime(newVal) // 时间归零
-        time = time.getTime() + (23 * 3600 + 3599) * 1000 // 当天的23:59秒截止
-        this.deadline = new Date(time)
-      },
-      immediate: true
-    }
-  },
   methods: {
-    // 将某天的时间归零
-    getDayTime (time) {
-      return new Date(time.getFullYear(), time.getMonth(), time.getDate())
-    },
     // 检查信息
     checkState () {
       let title = this.task.filter(item => item.title === this.title)
@@ -207,6 +206,10 @@ export default {
       this.clearData()
       this.$router.go(-1)
     }
+  },
+  mounted () {
+    this.tempTime = moment().startOf('day').valueOf()
+    this.deadline = moment().endOf('day').valueOf()
   }
 }
 </script>
