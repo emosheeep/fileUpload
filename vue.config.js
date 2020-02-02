@@ -1,5 +1,6 @@
 const LodashPlugin = require('lodash-webpack-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 module.exports = {
   chainWebpack: config => {
@@ -17,7 +18,12 @@ module.exports = {
       config.plugin('html').tap(options => {
         options[0].minify.removeAttributeQuotes = false
         return options
-      })
+      }).end()
+      config.plugin('compress').use(CompressionWebpackPlugin, [{
+        test: /\.js$|\.html$|\.css$/,
+        threshold: 10240, // 超过10kb就压缩
+        deleteOriginalAssets: false
+      }])
       if (process.env.npm_config_report) {
         config.plugin('analyzer')
           .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
