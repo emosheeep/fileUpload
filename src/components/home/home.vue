@@ -140,18 +140,11 @@
 </template>
 
 <script>
-import { Image, CellGroup, Popup, Loading } from 'vant'
 import { mapState } from 'vuex'
 import { client } from '../../api/upyun.js'
 import type from '../../store/mutation-types.js'
 export default {
   name: 'home',
-  components: {
-    'van-image': Image,
-    'van-popup': Popup,
-    'van-cell-group': CellGroup,
-    'van-loading': Loading
-  },
   data () {
     return {
       avatarPanelShow: false,

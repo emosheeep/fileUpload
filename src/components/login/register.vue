@@ -41,16 +41,12 @@
 </template>
 
 <script>
-import { CellGroup, Field, Popup } from 'vant'
 import _ from 'lodash'
 import { register } from '../../api/api'
 import SchoolPicker from './schoolPicker'
 export default {
   name: 'register',
   components: {
-    'van-cell-group': CellGroup,
-    'van-field': Field,
-    'van-popup': Popup,
     'phone': () => import('./phone'),
     SchoolPicker
   },

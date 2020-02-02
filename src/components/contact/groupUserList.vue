@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { Sticky, Panel, Popup } from 'vant'
 import UserEdit from './userEdit'
 import UserList from './userList'
 import { mapState } from 'vuex'
@@ -38,9 +37,6 @@ import type from '../../store/mutation-types'
 export default {
   name: 'groupUserList',
   components: {
-    'van-sticky': Sticky,
-    'van-panel': Panel,
-    'van-popup': Popup,
     UserList,
     UserEdit
   },

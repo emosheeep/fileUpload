@@ -24,13 +24,9 @@
 </template>
 
 <script>
-import { Image, Loading, ImagePreview } from 'vant'
+import { ImagePreview } from 'vant'
 export default {
   name: 'card',
-  components: {
-    'van-image': Image,
-    'van-loading': Loading
-  },
   props: {
     img: { required: true }
   },

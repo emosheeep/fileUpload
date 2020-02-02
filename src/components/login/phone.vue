@@ -1,33 +1,53 @@
 <template>
     <div>
-      <van-field v-model="phone" type="tel" label="手机号" required
-                 placeholder="请输入手机号" clearable
-                 right-icon="question-o"
-                 @click-right-icon="$toast('手机号作为账号用于登录')"
-                 maxlength="11"
-                 @blur="judgeMobile"
-                 :error-message="telErrMsg"/>
-      <van-field v-model="smsCode" type="number" maxlength="6" label="验证码"
-                 center clearable
-                 placeholder="请输入验证码">
-        <van-button slot="button" size="small" type="info"
-                    :disabled="isBanned"
-                    @click="sendCode">{{btnText}}</van-button>
+      <van-field
+        required
+        clearable
+        v-model="phone"
+        type="tel"
+        label="手机号"
+        maxlength="11"
+        :error-message="telErrMsg"
+        placeholder="请输入手机号"
+        right-icon="question-o"
+        @click-right-icon="$toast('手机号作为账号用于登录')"
+        @blur="judgeMobile"
+      />
+      <van-field
+        center
+        clearable
+        v-model="smsCode"
+        type="number"
+        maxlength="6"
+        label="验证码"
+        placeholder="请输入验证码"
+      >
+        <van-button
+          slot="button"
+          size="small"
+          type="info"
+          :disabled="isBanned"
+          @click="sendCode"
+        >
+          {{btnText}}
+        </van-button>
       </van-field>
-      <van-button plain size="large" :loading="loading"
-                  @click="submit">{{submitText}}</van-button>
+      <van-button
+        plain
+        size="large"
+        :loading="loading"
+        @click="submit"
+      >
+        {{submitText}}
+      </van-button>
     </div>
 </template>
 
 <script>
 import moment from 'moment'
-import { Field } from 'vant'
 import { sendAuthCode } from '../../api/api'
 export default {
   name: 'phone',
-  components: {
-    'van-field': Field
-  },
   props: {
     submitText: String,
     loading: Boolean // 控制按钮加载状态

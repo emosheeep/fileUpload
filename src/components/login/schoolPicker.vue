@@ -27,16 +27,10 @@
 </template>
 
 <script>
-import { List, Sticky, Search } from 'vant'
 import _ from 'lodash'
 import { getUniversity } from '../../api/api'
 export default {
   name: 'schoolPicker',
-  components: {
-    'van-list': List,
-    'van-sticky': Sticky,
-    'van-search': Search
-  },
   data () {
     return {
       finished: false,

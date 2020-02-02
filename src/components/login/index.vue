@@ -13,15 +13,12 @@
 
 <script>
 import login from './login'
-import { Tab, Tabs } from 'vant'
 export default {
   name: 'index',
   components: {
     login,
     'register': () => import('./register'),
-    'phone': import('./phone'),
-    'van-tabs': Tabs,
-    'van-tab': Tab
+    'phone': import('./phone')
   },
   data () {
     return {

@@ -27,19 +27,13 @@
 </template>
 
 <script>
-import {
-  Sticky,
-  PullRefresh
-} from 'vant'
 import { client, compress } from '../../../api/upyun'
 import { mapState } from 'vuex'
 import Card from './card'
 export default {
   name: 'preview',
   components: {
-    Card,
-    'van-sticky': Sticky,
-    'van-pull-refresh': PullRefresh
+    Card
   },
   props: {
     title: String

@@ -82,23 +82,10 @@ import type from '../../../store/mutation-types'
 import { removeTask, updateTask } from '../../../api/api'
 import { client } from '../../../api/upyun'
 import moment from 'moment'
-import {
-  ActionSheet, Panel, CountDown, Stepper,
-  Tab, Tabs, Tag
-} from 'vant'
 export default {
   name: 'taskDetail',
   props: {
     title: String
-  },
-  components: {
-    'van-action-sheet': ActionSheet,
-    'van-panel': Panel,
-    'van-count-down': CountDown,
-    'van-stepper': Stepper,
-    'van-tag': Tag,
-    'van-tab': Tab,
-    'van-tabs': Tabs
   },
   data () {
     return {

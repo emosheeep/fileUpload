@@ -20,14 +20,10 @@
 </template>
 
 <script>
-import { Field } from 'vant'
 import { login } from '../../api/api'
 import type from '../../store/mutation-types'
 export default {
   name: 'login',
-  components: {
-    'van-field': Field
-  },
   data () {
     return {
       phone: '',

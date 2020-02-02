@@ -33,9 +33,6 @@
 </template>
 
 <script>
-import {
-  Sticky, NavBar, PullRefresh, Popup
-} from 'vant'
 import type from '../../../store/mutation-types'
 import { mapState } from 'vuex'
 import TaskItem from '../task/taskItem'
@@ -46,11 +43,7 @@ export default {
   name: 'myTask',
   components: {
     Upload,
-    TaskItem,
-    Sticky,
-    NavBar,
-    PullRefresh,
-    Popup
+    TaskItem
   },
   data () {
     return {

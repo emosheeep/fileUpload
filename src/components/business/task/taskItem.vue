@@ -18,14 +18,8 @@
 
 <script>
 import moment from 'moment'
-import { Row, CountDown, NoticeBar } from 'vant'
 export default {
   name: 'taskItem',
-  components: {
-    'van-row': Row,
-    'van-count-down': CountDown,
-    'van-notice-bar': NoticeBar
-  },
   props: {
     task: Object
   },

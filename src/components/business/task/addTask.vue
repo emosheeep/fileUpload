@@ -85,10 +85,6 @@
 </template>
 
 <script>
-import {
-  CellGroup, Field, Checkbox,
-  CheckboxGroup, DatetimePicker, Popup
-} from 'vant'
 import _ from 'lodash'
 import moment from 'moment'
 import { mapState } from 'vuex'
@@ -96,14 +92,6 @@ import { addTask } from '../../../api/api'
 import type from '../../../store/mutation-types'
 export default {
   name: 'addTask',
-  components: {
-    'van-cell-group': CellGroup,
-    'van-field': Field,
-    'van-checkbox': Checkbox,
-    'van-checkbox-group': CheckboxGroup,
-    'van-datetime-picker': DatetimePicker,
-    'van-popup': Popup
-  },
   data () {
     return {
       loading: false, // 按钮状态

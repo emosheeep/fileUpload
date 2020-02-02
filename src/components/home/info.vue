@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import { CellGroup, Popup, Divider } from 'vant'
 import _ from 'lodash'
 import type from '../../store/mutation-types'
 import { mapState } from 'vuex'
@@ -74,10 +73,7 @@ export default {
   name: 'info',
   components: {
     Register: () => import('../login/register'),
-    Phone: () => import('../login/phone'),
-    'van-cell-group': CellGroup,
-    'van-popup': Popup,
-    'van-divider': Divider
+    Phone: () => import('../login/phone')
   },
   data () {
     return {

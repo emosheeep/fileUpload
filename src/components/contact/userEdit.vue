@@ -23,13 +23,9 @@
 </template>
 
 <script>
-import { Field } from 'vant'
 import { mapState } from 'vuex'
 export default {
   name: 'userEdit',
-  components: {
-    'van-field': Field
-  },
   props: {
     groupName: String,
     user: Object,

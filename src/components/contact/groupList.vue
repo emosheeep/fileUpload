@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { Sticky, Panel, Popup } from 'vant'
 import GroupList from './groupItem'
 import GroupEdit from './groupEdit'
 import mutationTypes from '../../store/mutation-types'
@@ -35,9 +34,6 @@ import { mapState } from 'vuex'
 export default {
   name: 'index',
   components: {
-    'van-sticky': Sticky,
-    'van-panel': Panel,
-    'van-popup': Popup,
     GroupList,
     GroupEdit
   },

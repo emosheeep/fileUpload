@@ -13,12 +13,8 @@
 </template>
 
 <script>
-import { SwipeCell } from 'vant'
 export default {
   name: 'groupList',
-  components: {
-    'van-swipe-cell': SwipeCell
-  },
   props: {
     list: Array // 小组对象数组
   },
