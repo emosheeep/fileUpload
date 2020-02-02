@@ -45,8 +45,7 @@ export default {
     },
     time () {
       // 返回剩余时间
-      const timeStamp = moment(this.task.deadline).subtract(Date.now()).format('x')
-      return Number(timeStamp)
+      return moment(this.task.deadline).subtract(Date.now()).valueOf()
     }
   }
 }

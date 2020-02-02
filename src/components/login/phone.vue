@@ -74,7 +74,7 @@ export default {
     delay (time) {
       // 利用cookie限制用户短信验证码的频率
       this.$cookie.set('curPhone', this.phone, {
-        expires: moment().add(time, 's').valueOf()
+        expires: moment().add(time, 's').toDate()
       })
       this.isBanned = true
       this.btnText = `${time}秒后重发`
@@ -92,7 +92,7 @@ export default {
     },
     // 返回值为true代表当前手机号还在冷却阶段，不能发验证码
     phoneCookie () {
-      let curPhone = this.$cookie.get('curPhone')
+      const curPhone = this.$cookie.get('curPhone')
       if (curPhone === this.phone) {
         return true
       } else return false

@@ -18,12 +18,12 @@ module.exports = {
         options[0].minify.removeAttributeQuotes = false
         return options
       })
-      // if (process.env.npm_config_report) {
-      //   config.plugin('analyzer')
-      //     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-      //     .end()
-      //   config.plugins.delete('prefetch')
-      // }
+      if (process.env.npm_config_report) {
+        config.plugin('analyzer')
+          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+          .end()
+        config.plugins.delete('prefetch')
+      }
     }
   }
 }

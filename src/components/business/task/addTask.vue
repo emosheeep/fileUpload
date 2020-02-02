@@ -110,7 +110,7 @@ export default {
       // 时间选择器
       timePickerShow: false,
       minDate: new Date(), // 截止时间默认一天后
-      maxDate: moment().add(1, 'M').valueOf(), // 最长一个月
+      maxDate: moment().add(1, 'M').toDate(), // 最长一个月
       tempTime: new Date(), // 截止时间默认一天后
       // 组件数据
       timeChange: false, // 标识时间变化，确认用户是否选择了日期
@@ -208,8 +208,8 @@ export default {
     }
   },
   mounted () {
-    this.tempTime = moment().startOf('day').valueOf()
-    this.deadline = moment().endOf('day').valueOf()
+    this.tempTime = moment().startOf('day').toDate()
+    this.deadline = moment().endOf('day').toDate()
   }
 }
 </script>

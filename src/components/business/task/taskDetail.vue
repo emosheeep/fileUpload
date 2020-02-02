@@ -17,8 +17,7 @@
 <!--      详情-->
       <van-panel title="任务描述" :desc="curTask.content">
         <div class="time-info">
-          <span>开始时间：{{timeFormat(curTask.startTime)}}</span>&nbsp;
-          <span>截止时间：{{timeFormat(curTask.deadline)}}</span>
+          <span>开始时间：{{timeFormat(curTask.startTime)}}</span>
           <van-count-down
             :time="time"
             style="color: orangered"
@@ -126,8 +125,8 @@ export default {
     },
     time () {
       // 返回剩余时间
-      const tempStamp = moment(this.curTask.deadline).subtract(Date.now()).format('x')
-      return Number(tempStamp)
+      const time = moment(this.curTask.deadline).subtract(Date.now())
+      return time.valueOf()
     },
     // 筛选未完成的人
     filter () {
@@ -142,6 +141,9 @@ export default {
     }
   },
   methods: {
+    timeFormat (time) {
+      return moment(time).format('YYYY-MM-DD HH:mm:ss')
+    },
     onSelect (item, index) {
       switch (index) {
         case 0: this.addTimeShow = true; break
@@ -193,13 +195,6 @@ export default {
         this.$toast.fail('删除失败')
         console.error(e)
       })
-    },
-    timeFormat (time) {
-      time = new Date(time)
-      let year = time.getFullYear()
-      let month = String(time.getMonth() + 1).padStart(2, '0')
-      let day = String(time.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
     },
     // 通过从云存储空间获取信息，判断当前已经提交的人数
     refresh () {
