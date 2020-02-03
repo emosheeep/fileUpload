@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Sticky>
-      <NavBar
+    <van-sticky>
+      <van-nav-bar
         title="待提交"
         left-arrow
         @click-left="$router.push({name: 'home'})">
-      </NavBar>
-    </Sticky>
+      </van-nav-bar>
+    </van-sticky>
     <!--      待提交清单-->
-    <PullRefresh
+    <van-pull-refresh
       v-model="freshLoading"
       @refresh="onRefresh"
       style="overflow: visible"
@@ -20,25 +20,25 @@
                    @click.native="showDetail(item)"
         />
       </div>
-    </PullRefresh>
+    </van-pull-refresh>
     <!--      详情页面-->
-    <Popup
+    <van-popup
       v-model="detailShow"
       :lazy-render="true"
       position="bottom"
     >
       <upload :task="curTask" :show.sync="detailShow"/>
-    </Popup>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import type from '../../../store/mutation-types'
+import { throttle } from 'lodash'
 import { mapState } from 'vuex'
-import TaskItem from '../task/taskItem'
 import { todoList } from '../../../api/api'
 import Upload from './upload'
-import { throttle } from 'lodash'
+import TaskItem from '../task/taskItem'
 export default {
   name: 'myTask',
   components: {

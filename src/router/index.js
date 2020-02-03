@@ -1,32 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store/index'
+import store from '../store'
+import home from './home'
+import task from './task'
+import contact from './contact'
+
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('../views/index.vue'),
-    beforeEnter: (to, from, next) => { // 跳转
-      if (to.fullPath === '/') {
-        next({ name: 'home', replace: true })
-      } else {
-        next()
-      }
-    },
-    children: [
-      {
-        path: 'explore',
-        name: 'explore',
-        component: () => import('../components/home/explore.vue')
-      },
-      {
-        path: 'home',
-        name: 'home',
-        component: () => import('../components/home/home.vue')
-      }
-    ]
-  },
+  home,
+  task,
+  contact,
   {
     path: '/login',
     name: 'login',
@@ -36,61 +20,6 @@ const routes = [
     path: '/info',
     name: 'info',
     component: () => import('../components/home/info.vue')
-  },
-  {
-    path: '/task',
-    name: 'task',
-    component: () => import('../components/business/task'),
-    beforeEnter: (to, from, next) => { // 跳转
-      if (to.name === 'task') {
-        next({ name: 'list', replace: true })
-      } else {
-        next()
-      }
-    },
-    children: [
-      {
-        path: 'list',
-        name: 'list',
-        component: () => import('../components/business/task/taskList.vue')
-      },
-      {
-        path: 'addTask',
-        name: 'addTask',
-        component: () => import('../components/business/task/addTask.vue')
-      },
-      {
-        path: 'detail',
-        name: 'detail',
-        component: () => import('../components/business/task/taskDetail.vue'),
-        props: route => ({ title: route.query.title })
-      }
-    ]
-  },
-  {
-    path: '/contact',
-    name: 'contact',
-    component: () => import('../components/contact'),
-    beforeEnter: (to, from, next) => { // 跳转
-      if (to.name === 'contact') {
-        next({ name: 'groups', replace: true })
-      } else {
-        next()
-      }
-    },
-    children: [
-      {
-        path: 'groups',
-        name: 'groups',
-        component: () => import('../components/contact/groupList.vue')
-      },
-      {
-        path: 'members',
-        name: 'members',
-        component: () => import('../components/contact/groupUserList.vue'),
-        props: route => ({ title: route.query.title })
-      }
-    ]
   },
   {
     path: '/todoList',

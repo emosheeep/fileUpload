@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/vant.js'
-import './assets/reset.css'
-import 'animate.css'
 import Cookies from 'js-cookie'
 
 Vue.config.productionTip = false

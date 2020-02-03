@@ -53,11 +53,13 @@ export default {
   border-radius 5px
   border 1px solid lightgrey
   box-sizing border-box
-  box-shadow 0 0 10px 2px lightgrey
+  box-shadow 0 0 10px lightgrey
   overflow hidden
   .img
     width 100%
     height 100px
   .info
     padding 0 5px
+    div
+      margin 2px
 </style>

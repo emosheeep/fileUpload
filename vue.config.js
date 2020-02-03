@@ -1,6 +1,7 @@
 const LodashPlugin = require('lodash-webpack-plugin')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
   chainWebpack: config => {
@@ -13,8 +14,23 @@ module.exports = {
       .port(5000)
       .disableHostCheck(true)
       .end()
+    config.optimization.splitChunks({
+      cacheGroups: {
+        common: {
+          name: 'common',
+          chunks: 'all',
+          minSize: 20,
+          minChunks: 2
+        }
+      }
+    })
     // 构建分析
     if (process.env.NODE_ENV === 'production') {
+      config.externals({
+        vue: 'Vue',
+        moment: 'moment',
+        'vue-router': 'VueRouter'
+      })
       config.plugin('html').tap(options => {
         options[0].minify.removeAttributeQuotes = false
         return options
@@ -25,9 +41,7 @@ module.exports = {
         deleteOriginalAssets: false
       }])
       if (process.env.npm_config_report) {
-        config.plugin('analyzer')
-          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-          .end()
+        config.plugin('analyzer').use(WebpackBundleAnalyzer).end()
         config.plugins.delete('prefetch')
       }
     }
