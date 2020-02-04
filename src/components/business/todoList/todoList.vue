@@ -14,10 +14,11 @@
       style="overflow: visible"
     >
       <div style="min-height: 90vh">
-        <task-item v-for="(item, index) in todoList"
-                   :key="index"
-                   :task="item"
-                   @click.native="showDetail(item)"
+        <task-item
+          v-for="(item, index) in todoList"
+          :key="index"
+          :task="item"
+          @click.native="showDetail(item)"
         />
       </div>
     </van-pull-refresh>
@@ -27,7 +28,10 @@
       :lazy-render="true"
       position="bottom"
     >
-      <upload :task="curTask" :show.sync="detailShow"/>
+      <upload
+        :task="curTask"
+        :show.sync="detailShow"
+      />
     </van-popup>
   </div>
 </template>

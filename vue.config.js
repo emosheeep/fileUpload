@@ -4,6 +4,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
+  publicPath: './',
   chainWebpack: config => {
     config
       .plugin('lodash').use(LodashPlugin).end()
@@ -37,7 +38,7 @@ module.exports = {
       }).end()
       config.plugin('compress').use(CompressionWebpackPlugin, [{
         test: /\.js$|\.html$|\.css$/,
-        threshold: 10240, // 超过10kb就压缩
+        threshold: 0, // 超过10kb就压缩
         deleteOriginalAssets: false
       }])
       if (process.env.npm_config_report) {
