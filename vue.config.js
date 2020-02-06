@@ -10,11 +10,7 @@ module.exports = {
       .plugin('lodash').use(LodashPlugin).end()
       .plugin('moment').use(MomentLocalesPlugin).end()
     config
-      .devServer
-      .host('0.0.0.0')
-      .port(5000)
-      .disableHostCheck(true)
-      .end()
+      .devServer.disableHostCheck(true).end()
     config.optimization.splitChunks({
       cacheGroups: {
         common: {

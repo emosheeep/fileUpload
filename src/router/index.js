@@ -4,38 +4,21 @@ import store from '../store'
 import home from './home'
 import task from './task'
 import contact from './contact'
+import download from './download'
+import todolist from './todolist'
 
 Vue.use(VueRouter)
 
 const routes = [
-  home,
-  task,
-  contact,
+  ...home,
+  ...task,
+  ...contact,
+  ...download,
+  ...todolist,
   {
     path: '/login',
     name: 'login',
-    component: () => import('../components/login')
-  },
-  {
-    path: '/info',
-    name: 'info',
-    component: () => import('../components/home/info.vue')
-  },
-  {
-    path: '/todoList',
-    name: 'todoList',
-    component: () => import('../components/business/todoList/todoList.vue')
-  },
-  {
-    path: '/files',
-    name: 'files',
-    component: () => import('../components/business/download/files.vue')
-  },
-  {
-    path: '/preview',
-    name: 'preview',
-    component: () => import('../components/business/download/preview.vue'),
-    props: route => ({ title: route.query.title })
+    component: () => import(/* webpackChunkName: "login" */ '../components/login')
   }
 ]
 

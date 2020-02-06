@@ -215,6 +215,8 @@ export default {
     height 250px
 .info-panel
   $radius = 100px
+  position relative
+  top 1px
   height 100px
   margin-top 150px
   background linear-gradient(

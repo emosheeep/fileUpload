@@ -44,10 +44,11 @@
 import _ from 'lodash'
 import { register } from '../../api/api'
 import SchoolPicker from './schoolPicker'
+import Phone from './phone'
 export default {
   name: 'register',
   components: {
-    'phone': () => import('./phone'),
+    Phone,
     SchoolPicker
   },
   data () {
