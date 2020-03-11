@@ -183,18 +183,32 @@ export default {
     changeAvatar (e, filename) {
       this.$animationCSS(e.target, 'bounce', () => {
         this.avatarPanelShow = false
-        this.$store.dispatch(type.SET_AVATAR, {
-          filename,
-          toast: this.$toast
+        this.loading({
+          loadingType: 'spinner',
+          duration: 0,
+          message: '请稍后',
+          forbidClick: true
+        })
+        this.$store.dispatch(type.SET_AVATAR, filename).then(() => {
+          this.$toast.clear()
+        }).catch(() => {
+          this.$toast.fail('更换失败')
         })
       })
     },
     changeBackground (e, filename) {
       this.$animationCSS(e.target, 'bounce', () => {
         this.backgroundPanelShow = false
-        this.$store.dispatch(type.SET_BACKGROUND, {
-          filename,
-          toast: this.$toast
+        this.loading({
+          loadingType: 'spinner',
+          duration: 0,
+          message: '请稍后',
+          forbidClick: true
+        })
+        this.$store.dispatch(type.SET_BACKGROUND, filename).then(() => {
+          this.$toast.clear()
+        }).catch(() => {
+          this.$toast.fail('更换失败')
         })
       })
     }

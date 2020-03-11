@@ -51,7 +51,7 @@ export default {
     },
     // 刷新列表数据
     onRefresh () {
-      this.$store.dispatch(type.SET_TASK, () => {
+      this.$store.dispatch(type.SET_TASK).then(() => {
         this.isLoading = false
       })
     }

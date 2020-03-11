@@ -103,6 +103,13 @@ export default {
     },
     // 将改变后的该分组信息映射到vuex中
     saveToState (list) {
+      // 发送请求
+      this.$toast.loading({
+        loadingType: 'spinner',
+        duration: 0,
+        message: '请稍后',
+        forbidClick: true
+      })
       // 构建小组信息
       const group = {
         id: this.group.id,
@@ -112,9 +119,10 @@ export default {
       let contact = this.contact.slice(0)
       // 映射当前分组的信息变化
       contact = contact.map(item => item.id === group.id ? group : item)
-      this.$store.dispatch(type.SET_CONTACT, {
-        contact,
-        vm: this
+      this.$store.dispatch(type.SET_CONTACT, contact).then(() => {
+        this.$toast.clear() // 停止加载
+      }).catch(e => {
+        this.$toast.fail('同步失败')
       })
     }
   }
