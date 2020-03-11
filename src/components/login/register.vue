@@ -27,11 +27,7 @@
 <!--        学校选择结束-->
         <van-field v-model="studentID"  label="学号"  placeholder="请输入学号"/>
 <!--        作用域插槽-->
-        <slot v-bind:user="{
-          username: username,
-          studentID: studentID,
-          university: university
-        }">
+        <slot :user="user">
           <phone submitText="注册" :loading="loading"
                  ref="phone"
                  @submit="register" />
@@ -66,6 +62,15 @@ export default {
       studentID: '', // 学号
       phone: '', // 电话号码
       telErrMsg: '' // 手机号格式错误提示消息
+    }
+  },
+  computed: {
+    user () {
+      return {
+        username: this.username,
+        studentID: this.studentID,
+        university: this.university
+      }
     }
   },
   watch: {
